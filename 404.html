@@ -1,13 +1,16 @@
 
- <!DOCTYPE HTML>
+  
+    <!DOCTYPE HTML>
 <html lang="zh-Hans">
 <head>
   <meta charset="UTF-8">
   
-    <title>COLAPIG</title>
+    <title>404 | COLAPIG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Gee">
+    
+    <meta name="description" content="对不起，未能找到您的页面页面将秒后自动跳转到主页">
     
     
     
@@ -22,9 +25,9 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
-  <body>
-    <header>
-      <div>
+      <body>
+        <header>
+          <div>
 		
 			<div id="imglogo">
 				<a href="/"><img src="/img/head.png" alt="COLAPIG" title="COLAPIG"/></a>
@@ -56,52 +59,49 @@
 			</nav>			
 </div>
 
-    </header>
-    <div id="container">
-      <div id="main">
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2016/05/03/Welcome/" title="Welcome" itemprop="url">
-  
-    <h1 itemprop="name">Welcome</h1>
+        </header>
+        <div id="container">
+          <div id="main" class="page" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-     
-           <p itemprop="description" >Welcome to colapig’s home! : D</p>
-        
+      <a href="//404.html" title="404" itemprop="url">404</a>
+  </h1>
+  <p class="article-author">By
     
-    <time datetime="2016-05-03T03:40:18.000Z" itemprop="datePublished">2016-05-03</time>
-  </a>
-</section>
-
-
-</div>
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
-
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
-<aside class="clearfix">
-
+      <a href="http://colapig.github.io" title="Gee">Gee</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-05-03T08:26:08.000Z" itemprop="datePublished">2016-05-03</time>
+    Updated:<time datetime="2016-04-10T17:49:06.000Z" itemprop="dateModified">2016-04-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<p><strong>对不起，未能找到您的页面</strong><br>页面将<span id="jumpTo"></span>秒后自动跳转到<a href="http://kinva.cc" target="_blank" rel="external">主页</a></p>
   
+	</div>
+		<footer class="article-footer clearfix">
 
-  
 
-  <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS</a>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://colapig.github.io//404.html" data-title="404 | COLAPIG" data-tsina="null" class="share clearfix">
+  </div>
+
 </div>
-
-  <div class="linkslist">
-  <p class="asidetitle">Links</p>
-    <ul>
-      <li><a href="http://kinva.cc" target="_blank" title="YangJian">迪拜小王子</a></li>
-    </ul>
-</div>
-
-
-</aside>
-</div>
-    </div>
-    <footer><div id="footer" >
+</footer>   	       
+	</article>
+	
+	
+</div>  
+        </div>
+        <footer><div id="footer" >
 	
 	<div class="line">
 		<span></span>
@@ -132,7 +132,7 @@
 		</p>
 </div>
 </footer>
-    <script src="/js/jquery-2.1.0.min.js"></script>
+        <script src="/js/jquery-2.1.0.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.navbar').click(function(){
@@ -179,10 +179,39 @@ $(document).ready(function(){
 </script>
 
 
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
 
 
 
 
 
-  </body>
- </html>
+
+      </body>
+     </html>
+     
