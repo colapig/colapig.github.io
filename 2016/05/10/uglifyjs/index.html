@@ -1,0 +1,352 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>uglifyjs与AST | COLAPIG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Gee">
+    
+    <meta name="description" content="UglifyJS 提供了一些工具用于分析JavaScript代码，包括：
+
+parser，把 JavaScript 代码解析成抽象语法树
+code generator，通过抽象语法树生成代码
+compressor， 压缩 JavaScript代码
+mangler，混淆 JavaScript 代码
+s">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/z.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/head.png" alt="COLAPIG" title="COLAPIG"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="COLAPIG">COLAPIG</a></h1>
+				<h2 class="blog-motto">A pig like drinking cola</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:colapig.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/05/10/uglifyjs/" title="uglifyjs与AST" itemprop="url">uglifyjs与AST</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://colapig.github.io" title="Gee">Gee</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-05-10T03:40:18.000Z" itemprop="datePublished">2016-05-10</time>
+    Updated:<time datetime="2016-05-24T16:18:35.000Z" itemprop="dateModified">2016-05-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#parser生成抽象语法树"><span class="toc-number">1.</span> <span class="toc-text">parser生成抽象语法树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#transformer的用法"><span class="toc-number">2.</span> <span class="toc-text">transformer的用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#“before”-visitor"><span class="toc-number">2.1.</span> <span class="toc-text">“before” visitor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#“after”-visitor"><span class="toc-number">2.2.</span> <span class="toc-text">“after” visitor</span></a></li></ol></li></ol>
+		</div>
+		
+		<p>UglifyJS 提供了一些工具用于分析JavaScript代码，包括：</p>
+<ul>
+<li>parser，把 JavaScript 代码解析成抽象语法树</li>
+<li>code generator，通过抽象语法树生成代码</li>
+<li>compressor， 压缩 JavaScript代码</li>
+<li>mangler，混淆 JavaScript 代码</li>
+<li>scope analyzer，分析变量定义的工具</li>
+<li>tree walker，遍历树节点</li>
+<li>tree transformer，改变树节点</li>
+</ul>
+<h2 id="parser生成抽象语法树"><a href="#parser生成抽象语法树" class="headerlink" title="parser生成抽象语法树"></a>parser生成抽象语法树</h2><p>UglifyJS.parse可将code解析成抽象语法树<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> toplevel = UglifyJS.parse(code);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(toplevel.body[<span class="number">0</span>]));</span><br></pre></td></tr></table></figure><br>将下面代码进行parse操作：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> key = <span class="string">"Hello"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(key);</span><br></pre></td></tr></table></figure></p>
+<p>得到的结果为:<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        "end":&#123;</span><br><span class="line">            "file":null,</span><br><span class="line">            "comments_before":[],</span><br><span class="line">            "nlb":false,</span><br><span class="line">            "endpos":18,</span><br><span class="line">            "endcol":18,</span><br><span class="line">            "endline":1,</span><br><span class="line">            "pos":17,</span><br><span class="line">            "col":17,</span><br><span class="line">            "line":1,</span><br><span class="line">            "value":";",</span><br><span class="line">            "type":"punc"</span><br><span class="line">        &#125;,</span><br><span class="line">        "start":&#123;</span><br><span class="line">            "file":null,</span><br><span class="line">            "comments_before":[],</span><br><span class="line">            "nlb":false,</span><br><span class="line">            "endpos":3,</span><br><span class="line">            "endcol":3,</span><br><span class="line">            "endline":1,</span><br><span class="line">            "pos":0,</span><br><span class="line">            "col":0,</span><br><span class="line">            "line":1,</span><br><span class="line">            "value":"var",</span><br><span class="line">            "type":"keyword"</span><br><span class="line">        &#125;,</span><br><span class="line">        "definitions":[</span><br><span class="line">            &#123;</span><br><span class="line">                "end":&#123;</span><br><span class="line">                    "raw":""Hello"",</span><br><span class="line">                    "file":null,</span><br><span class="line">                    "comments_before":[],</span><br><span class="line">                    "nlb":false,</span><br><span class="line">                    "endpos":17,</span><br><span class="line">                    "endcol":17,</span><br><span class="line">                    "endline":1,</span><br><span class="line">                    "pos":10,</span><br><span class="line">                    "col":10,</span><br><span class="line">                    "line":1,</span><br><span class="line">                    "value":"Hello",</span><br><span class="line">                    "type":"string",</span><br><span class="line">                    "quote":"""</span><br><span class="line">                &#125;,</span><br><span class="line">                "start":&#123;</span><br><span class="line">                    "file":null,</span><br><span class="line">                    "comments_before":[],</span><br><span class="line">                    "nlb":false,</span><br><span class="line">                    "endpos":7,</span><br><span class="line">                    "endcol":7,</span><br><span class="line">                    "endline":1,</span><br><span class="line">                    "pos":4,</span><br><span class="line">                    "col":4,</span><br><span class="line">                    "line":1,</span><br><span class="line">                    "value":"key",</span><br><span class="line">                    "type":"name"</span><br><span class="line">                &#125;,</span><br><span class="line">                "value":&#123;</span><br><span class="line">                    "end":&#123;</span><br><span class="line">                        "raw":""Hello"",</span><br><span class="line">                        "file":null,</span><br><span class="line">                        "comments_before":[],</span><br><span class="line">                        "nlb":false,</span><br><span class="line">                        "endpos":17,</span><br><span class="line">                        "endcol":17,</span><br><span class="line">                        "endline":1,</span><br><span class="line">                        "pos":10,</span><br><span class="line">                        "col":10,</span><br><span class="line">                        "line":1,</span><br><span class="line">                        "value":"Hello",</span><br><span class="line">                        "type":"string",</span><br><span class="line">                        "quote":"""</span><br><span class="line">                    &#125;,</span><br><span class="line">                    "start":&#123;</span><br><span class="line">                        "raw":""Hello"",</span><br><span class="line">                        "file":null,</span><br><span class="line">                        "comments_before":[],</span><br><span class="line">                        "nlb":false,</span><br><span class="line">                        "endpos":17,</span><br><span class="line">                        "endcol":17,</span><br><span class="line">                        "endline":1,</span><br><span class="line">                        "pos":10,</span><br><span class="line">                        "col":10,</span><br><span class="line">                        "line":1,</span><br><span class="line">                        "value":"Hello",</span><br><span class="line">                        "type":"string",</span><br><span class="line">                        "quote":"""</span><br><span class="line">                    &#125;,</span><br><span class="line">                    "quote":""",</span><br><span class="line">                    "value":"Hello"</span><br><span class="line">                &#125;,</span><br><span class="line">                "name":&#123;</span><br><span class="line">                    "end":&#123;</span><br><span class="line">                        "file":null,</span><br><span class="line">                        "comments_before":[],</span><br><span class="line">                        "nlb":false,</span><br><span class="line">                        "endpos":7,</span><br><span class="line">                        "endcol":7,</span><br><span class="line">                        "endline":1,</span><br><span class="line">                        "pos":4,</span><br><span class="line">                        "col":4,</span><br><span class="line">                        "line":1,</span><br><span class="line">                        "value":"key",</span><br><span class="line">                        "type":"name"</span><br><span class="line">                    &#125;,</span><br><span class="line">                    "start":&#123;</span><br><span class="line">                        "file":null,</span><br><span class="line">                        "comments_before":[],</span><br><span class="line">                        "nlb":false,</span><br><span class="line">                        "endpos":7,</span><br><span class="line">                        "endcol":7,</span><br><span class="line">                        "endline":1,</span><br><span class="line">                        "pos":4,</span><br><span class="line">                        "col":4,</span><br><span class="line">                        "line":1,</span><br><span class="line">                        "value":"key",</span><br><span class="line">                        "type":"name"</span><br><span class="line">                    &#125;,</span><br><span class="line">                    "name":"key"</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        "end":&#123;</span><br><span class="line">            "file":null,</span><br><span class="line">            "comments_before":[],</span><br><span class="line">            "nlb":false,</span><br><span class="line">            "endpos":37,</span><br><span class="line">            "endcol":17,</span><br><span class="line">            "endline":2,</span><br><span class="line">            "pos":36,</span><br><span class="line">            "col":16,</span><br><span class="line">            "line":2,</span><br><span class="line">            "value":";",</span><br><span class="line">            "type":"punc"</span><br><span class="line">        &#125;,</span><br><span class="line">        "start":&#123;</span><br><span class="line">            "file":null,</span><br><span class="line">            "comments_before":[],</span><br><span class="line">            "nlb":true,</span><br><span class="line">            "endpos":27,</span><br><span class="line">            "endcol":7,</span><br><span class="line">            "endline":2,</span><br><span class="line">            "pos":20,</span><br><span class="line">            "col":0,</span><br><span class="line">            "line":2,</span><br><span class="line">            "value":"console",</span><br><span class="line">            "type":"name"</span><br><span class="line">        &#125;,</span><br><span class="line">        "body":&#123;</span><br><span class="line">            "end":&#123;</span><br><span class="line">                "file":null,</span><br><span class="line">                "comments_before":[],</span><br><span class="line">                "nlb":false,</span><br><span class="line">                "endpos":36,</span><br><span class="line">                "endcol":16,</span><br><span class="line">                "endline":2,</span><br><span class="line">                "pos":35,</span><br><span class="line">                "col":15,</span><br><span class="line">                "line":2,</span><br><span class="line">                "value":")",</span><br><span class="line">                "type":"punc"</span><br><span class="line">            &#125;,</span><br><span class="line">            "start":&#123;</span><br><span class="line">                "file":null,</span><br><span class="line">                "comments_before":[],</span><br><span class="line">                "nlb":true,</span><br><span class="line">                "endpos":27,</span><br><span class="line">                "endcol":7,</span><br><span class="line">                "endline":2,</span><br><span class="line">                "pos":20,</span><br><span class="line">                "col":0,</span><br><span class="line">                "line":2,</span><br><span class="line">                "value":"console",</span><br><span class="line">                "type":"name"</span><br><span class="line">            &#125;,</span><br><span class="line">            "args":[</span><br><span class="line">                &#123;</span><br><span class="line">                    "end":&#123;</span><br><span class="line">                        "file":null,</span><br><span class="line">                        "comments_before":[],</span><br><span class="line">                        "nlb":false,</span><br><span class="line">                        "endpos":35,</span><br><span class="line">                        "endcol":15,</span><br><span class="line">                        "endline":2,</span><br><span class="line">                        "pos":32,</span><br><span class="line">                        "col":12,</span><br><span class="line">                        "line":2,</span><br><span class="line">                        "value":"key",</span><br><span class="line">                        "type":"name"</span><br><span class="line">                    &#125;,</span><br><span class="line">                    "start":&#123;</span><br><span class="line">                        "file":null,</span><br><span class="line">                        "comments_before":[],</span><br><span class="line">                        "nlb":false,</span><br><span class="line">                        "endpos":35,</span><br><span class="line">                        "endcol":15,</span><br><span class="line">                        "endline":2,</span><br><span class="line">                        "pos":32,</span><br><span class="line">                        "col":12,</span><br><span class="line">                        "line":2,</span><br><span class="line">                        "value":"key",</span><br><span class="line">                        "type":"name"</span><br><span class="line">                    &#125;,</span><br><span class="line">                    "name":"key"</span><br><span class="line">                &#125;</span><br><span class="line">            ],</span><br><span class="line">            "expression":&#123;</span><br><span class="line">                "end":&#123;</span><br><span class="line">                    "file":null,</span><br><span class="line">                    "comments_before":[],</span><br><span class="line">                    "nlb":false,</span><br><span class="line">                    "endpos":31,</span><br><span class="line">                    "endcol":11,</span><br><span class="line">                    "endline":2,</span><br><span class="line">                    "pos":28,</span><br><span class="line">                    "col":8,</span><br><span class="line">                    "line":2,</span><br><span class="line">                    "value":"log",</span><br><span class="line">                    "type":"name"</span><br><span class="line">                &#125;,</span><br><span class="line">                "start":&#123;</span><br><span class="line">                    "file":null,</span><br><span class="line">                    "comments_before":[],</span><br><span class="line">                    "nlb":true,</span><br><span class="line">                    "endpos":27,</span><br><span class="line">                    "endcol":7,</span><br><span class="line">                    "endline":2,</span><br><span class="line">                    "pos":20,</span><br><span class="line">                    "col":0,</span><br><span class="line">                    "line":2,</span><br><span class="line">                    "value":"console",</span><br><span class="line">                    "type":"name"</span><br><span class="line">                &#125;,</span><br><span class="line">                "property":"log",</span><br><span class="line">                "expression":&#123;</span><br><span class="line">                    "end":&#123;</span><br><span class="line">                        "file":null,</span><br><span class="line">                        "comments_before":[],</span><br><span class="line">                        "nlb":true,</span><br><span class="line">                        "endpos":27,</span><br><span class="line">                        "endcol":7,</span><br><span class="line">                        "endline":2,</span><br><span class="line">                        "pos":20,</span><br><span class="line">                        "col":0,</span><br><span class="line">                        "line":2,</span><br><span class="line">                        "value":"console",</span><br><span class="line">                        "type":"name"</span><br><span class="line">                    &#125;,</span><br><span class="line">                    "start":&#123;</span><br><span class="line">                        "file":null,</span><br><span class="line">                        "comments_before":[],</span><br><span class="line">                        "nlb":true,</span><br><span class="line">                        "endpos":27,</span><br><span class="line">                        "endcol":7,</span><br><span class="line">                        "endline":2,</span><br><span class="line">                        "pos":20,</span><br><span class="line">                        "col":0,</span><br><span class="line">                        "line":2,</span><br><span class="line">                        "value":"console",</span><br><span class="line">                        "type":"name"</span><br><span class="line">                    &#125;,</span><br><span class="line">                    "name":"console"</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<h2 id="transformer的用法"><a href="#transformer的用法" class="headerlink" title="transformer的用法"></a>transformer的用法</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">before</span>(<span class="params">node, descend</span>) </span>&#123; ... &#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">after</span>(<span class="params">node</span>) </span>&#123; ... &#125;;</span><br><span class="line"><span class="keyword">var</span> tt = <span class="keyword">new</span> UglifyJS.TreeTransformer(before, after);</span><br><span class="line"><span class="keyword">var</span> new_ast = ast.transform(tt);</span><br></pre></td></tr></table></figure>
+<h3 id="“before”-visitor"><a href="#“before”-visitor" class="headerlink" title="“before” visitor"></a>“before” visitor</h3><p>在树中的每一个节点， before visitor在遍历子节点之前被调用。它接受2个参数，现在的节点和子函数。</p>
+<ul>
+<li>before visitorf返回undefined:<br> 如果后续访问者存在，遍历树会复制当前节点并进入处理子节点然后调用after visitor,<br> 如果没有after visitor， 它将直接处理当前节点。</li>
+<li>如果before visitor 返回了一个值，则当前节点会被这个值替换。它的子节点不会被处理，after visitor也不会被调用。</li>
+</ul>
+<h3 id="“after”-visitor"><a href="#“after”-visitor" class="headerlink" title="“after” visitor"></a>“after” visitor</h3><p>如果你使用了after visitor, 它只有在before visitor返回undefined，节点被复制的时候才会被调用。如果after visitor返回的不是undefined，则现节点的值将被这个返回值覆盖。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/js/">js</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://colapig.github.io/2016/05/10/uglifyjs/" data-title="uglifyjs与AST | COLAPIG" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/05/03/scrapy/"  title="关于scrapy">
+ <strong>NEXT:</strong><br/> 
+ <span>关于scrapy
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#parser生成抽象语法树"><span class="toc-number">1.</span> <span class="toc-text">parser生成抽象语法树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#transformer的用法"><span class="toc-number">2.</span> <span class="toc-text">transformer的用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#“before”-visitor"><span class="toc-number">2.1.</span> <span class="toc-text">“before” visitor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#“after”-visitor"><span class="toc-number">2.2.</span> <span class="toc-text">“after” visitor</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/js/" title="js">js<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://kinva.cc" target="_blank" title="YangJian">迪拜小王子</a></li>
+    </ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A lazy pig drinking lots of cola <br/>
+			Specialized in writing BUGs</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/colapig" target="_blank" title="github"></a>
+		
+		
+		<a href="https://www.facebook.com/gee.zhang.3" target="_blank" title="facebook"></a>
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://colapig.github.io" target="_blank" title="Gee">Gee</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
