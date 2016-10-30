@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>SpiderMonkey | COLAPIG</title>
+    <title>Two Sum | COLAPIG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Gee">
     
-    <meta name="description" content="常见的表达结构
-函数声明 FunctionDeclaration12345678910interface FunctionDeclaration &amp;lt;: Function, Declaration &amp;#123;    type: &quot;FunctionDeclaration&quot;;    id: Ide">
+    <meta name="description" content="做了场indeed的机试，惨不忍睹……算法不会，连语法都快不会了……学妹救场，半小时随随便便就把CD两题过了……不刷题不行啊。。。不能再堕落下去了。算法很烂，所以每天一题，从简单的开始。看能坚持多久吧。
+two Sum找出数组[a, b, c, d, e]中和为f的2个数，返回下标（0开始）。假设只">
     
     
     
@@ -66,15 +66,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/05/15/SpiderMonkey/" title="SpiderMonkey" itemprop="url">SpiderMonkey</a>
+      <a href="/2016/10/30/leetcode/" title="Two Sum" itemprop="url">Two Sum</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://colapig.github.io" title="Gee">Gee</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-05-15T07:42:18.000Z" itemprop="datePublished">2016-05-15</time>
-    Updated:<time datetime="2016-05-15T07:37:40.000Z" itemprop="dateModified">2016-05-15</time>
+    <time datetime="2016-10-30T14:22:18.000Z" itemprop="datePublished">2016-10-30</time>
+    Updated:<time datetime="2016-10-30T15:22:48.000Z" itemprop="dateModified">2016-10-30</time>
     
   </p>
 </header>
@@ -83,22 +83,29 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#函数声明-FunctionDeclaration"><span class="toc-number">1.</span> <span class="toc-text">函数声明 FunctionDeclaration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量声明-variableDeclaration"><span class="toc-number">2.</span> <span class="toc-text">变量声明 variableDeclaration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ExpressionStatement"><span class="toc-number">3.</span> <span class="toc-text">ExpressionStatement</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#two-Sum"><span class="toc-number">1.</span> <span class="toc-text">two Sum</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#input"><span class="toc-number">1.1.</span> <span class="toc-text">input</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#output"><span class="toc-number">1.2.</span> <span class="toc-text">output</span></a></li></ol></li></ol>
 		</div>
 		
-		<p>常见的表达结构</p>
-<h2 id="函数声明-FunctionDeclaration"><a href="#函数声明-FunctionDeclaration" class="headerlink" title="函数声明 FunctionDeclaration"></a>函数声明 FunctionDeclaration</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">interface FunctionDeclaration &lt;: Function, Declaration &#123;</span><br><span class="line">    type: "FunctionDeclaration";</span><br><span class="line">    id: Identifier;</span><br><span class="line">    params: [ Pattern ];</span><br><span class="line">    defaults: [ Expression ];</span><br><span class="line">    rest: Identifier | null;</span><br><span class="line">    body: BlockStatement | Expression;</span><br><span class="line">    generator: boolean;</span><br><span class="line">    expression: boolean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="变量声明-variableDeclaration"><a href="#变量声明-variableDeclaration" class="headerlink" title="变量声明 variableDeclaration"></a>变量声明 variableDeclaration</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">interface VariableDeclaration &lt;: Declaration &#123;</span><br><span class="line">    type: "VariableDeclaration";</span><br><span class="line">    declarations: [ VariableDeclarator ];</span><br><span class="line">    kind: "var" | "let" | "const";</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="ExpressionStatement"><a href="#ExpressionStatement" class="headerlink" title="ExpressionStatement"></a>ExpressionStatement</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface ExpressionStatement &lt;: Statement &#123;</span><br><span class="line">    type: "ExpressionStatement";</span><br><span class="line">    expression: Expression;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>  
+		<p>做了场indeed的机试，惨不忍睹……算法不会，连语法都快不会了……<br>学妹救场，半小时随随便便就把CD两题过了……<br>不刷题不行啊。。。<br>不能再堕落下去了。<br>算法很烂，所以每天一题，从简单的开始。看能坚持多久吧。</p>
+<h3 id="two-Sum"><a href="#two-Sum" class="headerlink" title="two Sum"></a>two Sum</h3><p>找出数组[a, b, c, d, e]中和为f的2个数，返回下标（0开始）。假设只有一组解。</p>
+<h4 id="input"><a href="#input" class="headerlink" title="input"></a>input</h4><p>[ 2,3,5 ]<br>8</p>
+<h4 id="output"><a href="#output" class="headerlink" title="output"></a>output</h4><p>[ 1,2 ]</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length -<span class="number">1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = i +<span class="number">1</span> ; j &lt; nums.length; j++)&#123;</span><br><span class="line">                 <span class="keyword">if</span>((target - nums[i]) == nums[j])&#123;</span><br><span class="line">                    res[<span class="number">0</span>] = i;</span><br><span class="line">                    res[<span class="number">1</span>] = j;</span><br><span class="line">                    <span class="keyword">return</span> res;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  
 	</div>
 		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/leetcode/">leetcode</a>
+  </div>
 
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://colapig.github.io/2016/05/15/SpiderMonkey/" data-title="SpiderMonkey | COLAPIG" data-tsina="null" class="share clearfix">
+  <div data-url="http://colapig.github.io/2016/10/30/leetcode/" data-title="Two Sum | COLAPIG" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -128,7 +135,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#函数声明-FunctionDeclaration"><span class="toc-number">1.</span> <span class="toc-text">函数声明 FunctionDeclaration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量声明-variableDeclaration"><span class="toc-number">2.</span> <span class="toc-text">变量声明 variableDeclaration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ExpressionStatement"><span class="toc-number">3.</span> <span class="toc-text">ExpressionStatement</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#two-Sum"><span class="toc-number">1.</span> <span class="toc-text">two Sum</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#input"><span class="toc-number">1.1.</span> <span class="toc-text">input</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#output"><span class="toc-number">1.2.</span> <span class="toc-text">output</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
@@ -138,6 +145,21 @@
   
 
   
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/algorithms/" title="algorithms">algorithms<sup>0</sup></a></li>
+		
+			<li><a href="/tags/js/" title="js">js<sup>1</sup></a></li>
+		
+			<li><a href="/tags/leetcode/" title="leetcode">leetcode<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
 
   <div class="rsspart">
 	<a href="null" target="_blank" title="rss">RSS</a>
