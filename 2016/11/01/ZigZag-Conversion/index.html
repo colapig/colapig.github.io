@@ -4,17 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Longest Substring Without Repeating Characters | COLAPIG</title>
+    <title>ZigZag Conversion | COLAPIG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Gee">
     
-    <meta name="description" content="Longest Substring Without Repeating Characters找出一串字符中的最长不重复子串，并输出长度
-input[b,a,c,d,e,f,a]
-output6
-开始的复杂度是o2(n)，最后一组数据超时了。
-    public class Solution {
- ">
+    <meta name="description" content="给出形为下图的字符的横排顺序。  
+0       8         161     7 9      15 172   6   10   14   183 5     11 134       12
+循环为2n-2，其中n为列数。找规律。convert(“PAYPALISHIRING”, 3) ">
     
     
     
@@ -70,15 +67,15 @@ output6
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/10/31/Longest-Substring-Without-Repeating-Characters/" title="Longest Substring Without Repeating Characters" itemprop="url">Longest Substring Without Repeating Characters</a>
+      <a href="/2016/11/01/ZigZag-Conversion/" title="ZigZag Conversion" itemprop="url">ZigZag Conversion</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://colapig.github.io" title="Gee">Gee</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-10-31T10:52:37.000Z" itemprop="datePublished">2016-10-31</time>
-    Updated:<time datetime="2016-10-31T12:40:52.000Z" itemprop="dateModified">2016-10-31</time>
+    <time datetime="2016-11-01T15:34:45.000Z" itemprop="datePublished">2016-11-01</time>
+    Updated:<time datetime="2016-11-01T15:40:08.000Z" itemprop="dateModified">2016-11-01</time>
     
   </p>
 </header>
@@ -87,69 +84,38 @@ output6
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Longest-Substring-Without-Repeating-Characters"><span class="toc-number">1.</span> <span class="toc-text">Longest Substring Without Repeating Characters</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#input"><span class="toc-number">1.1.</span> <span class="toc-text">input</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#output"><span class="toc-number">2.</span> <span class="toc-text">output</span></a></li></ol>
+		
 		</div>
 		
-		<h3 id="Longest-Substring-Without-Repeating-Characters"><a href="#Longest-Substring-Without-Repeating-Characters" class="headerlink" title="Longest Substring Without Repeating Characters"></a>Longest Substring Without Repeating Characters</h3><p>找出一串字符中的最长不重复子串，并输出长度</p>
-<h4 id="input"><a href="#input" class="headerlink" title="input"></a>input</h4><p>[b,a,c,d,e,f,a]</p>
-<h3 id="output"><a href="#output" class="headerlink" title="output"></a>output</h3><p>6</p>
-<p>开始的复杂度是o2(n)，最后一组数据超时了。</p>
-<pre><code class="java">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>{
-        <span class="keyword">if</span>(s.length() &lt; <span class="number">2</span>){
-                <span class="keyword">return</span> s.length();
-        }
-        String result = <span class="string">""</span>;
-        String temp = <span class="string">""</span>;
-        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++){
-            temp = <span class="string">""</span> + s.charAt(i); <span class="comment">// 进行下一个赋值</span>
-            <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j &lt; s.length(); j++){
-                <span class="keyword">if</span>(!temp.contains(<span class="string">""</span>+s.charAt(j))){
-                    temp += s.charAt(j);
-                    <span class="keyword">if</span>(temp.length() &gt; result.length()){
-                        result = temp;
-                    }
-                }<span class="keyword">else</span>{
-                    <span class="keyword">if</span>(temp.length() &gt; result.length()){
-                        result = temp;
-                    }
-                    temp= <span class="string">""</span>;
-                    <span class="keyword">break</span>;
-                }
-            }
-        }
-
-        <span class="keyword">return</span> result.length();    
-    }
-}
-</code></pre>
-<p>看了题解，其实可以记录状态。就是说，当abcdefa的检测到重复时，因为abcdef已经检测过了，不用重头从bcdef检测，而是直接检测bcdefa这个长度的字符是否和前面重复即可。用2个变量i,j，从头开始遍历检测，当检测到重复的时候，直接i,j各向右位移一位。同时，因为所有字符是可以枚举的，可以用一个数组记录状态是否被检查过。  </p>
-<p>修改过的代码：</p>
+		<p>给出形为下图的字符的横排顺序。  </p>
+<p>0       8         16<br>1     7 9      15 17<br>2   6   10   14   18<br>3 5     11 13<br>4       12</p>
+<p>循环为2n-2，其中n为列数。<br>找规律。<br>convert(“PAYPALISHIRING”, 3) should return “PAHNAPLSIIGYIR”。  </p>
 <pre><code class="java"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>{
-        <span class="keyword">boolean</span>[] visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[<span class="number">256</span>];
-        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;
-        <span class="keyword">int</span> max = <span class="number">0</span>, cur = <span class="number">0</span>;
-        <span class="keyword">while</span>(i &lt; s.length()){
-            <span class="keyword">if</span>(!visited[s.charAt(i)]){
-                visited[s.charAt(i)] = <span class="keyword">true</span>;
-                i++;
-            }<span class="keyword">else</span>{
-                <span class="keyword">while</span>(s.charAt(j)!=s.charAt(i)){
-                    visited[s.charAt(j)] = <span class="keyword">false</span>;
-                    j++;
-                }
-                i++;
-                j++;
+     <span class="function"><span class="keyword">public</span> String <span class="title">convert</span><span class="params">(String s, <span class="keyword">int</span> numRows)</span> </span>{
+            <span class="keyword">if</span>(numRows &lt;= <span class="number">1</span>){
+                <span class="keyword">return</span> s;
             }
-            cur = i - j;
-            max = max &gt; cur ?max:cur;
+            String[] res= <span class="keyword">new</span>  String[numRows];
+            Arrays.fill(res, <span class="string">""</span>);
+            <span class="keyword">int</span> j, i=<span class="number">0</span> ,times = <span class="number">2</span> * numRows - <span class="number">2</span>;
+            <span class="keyword">while</span>(i &lt; s.length()){
+               <span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; numRows &amp;&amp; i &lt; s.length(); j++){
+                   res[j] += s.charAt(i);
+                   i++;
+               }
+               <span class="keyword">for</span>(j = numRows - <span class="number">2</span>; j &gt; <span class="number">0</span> &amp;&amp; i &lt; s.length(); j--){
+                   res[j] += s.charAt(i);
+                   i++;
+               }
+            }
+            String va = <span class="string">""</span>;
+            <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; numRows; k++){
+                va += res[k];
+            }
+            <span class="keyword">return</span> va;
         }
-        <span class="keyword">return</span> max;  
-    }
 }
 </code></pre>
-<p>题外话……发布的时候趁机做题，结果没有好好验日志，线上报了一堆error……幸好老大没发现……</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -164,7 +130,7 @@ output6
 
 <div class="article-share" id="share">
 
-  <div data-url="http://colapig.github.io/2016/10/31/Longest-Substring-Without-Repeating-Characters/" data-title="Longest Substring Without Repeating Characters | COLAPIG" data-tsina="null" class="share clearfix">
+  <div data-url="http://colapig.github.io/2016/11/01/ZigZag-Conversion/" data-title="ZigZag Conversion | COLAPIG" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -173,19 +139,11 @@ output6
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/11/01/ZigZag-Conversion/" title="ZigZag Conversion">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  ZigZag Conversion</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/10/31/Add-Two-Numbers/"  title="Add Two Numbers">
+<a href="/2016/10/31/Longest-Substring-Without-Repeating-Characters/"  title="Longest Substring Without Repeating Characters">
  <strong>NEXT:</strong><br/> 
- <span>Add Two Numbers
+ <span>Longest Substring Without Repeating Characters
 </span>
 </a>
 </div>
@@ -202,7 +160,7 @@ output6
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Longest-Substring-Without-Repeating-Characters"><span class="toc-number">1.</span> <span class="toc-text">Longest Substring Without Repeating Characters</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#input"><span class="toc-number">1.1.</span> <span class="toc-text">input</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#output"><span class="toc-number">2.</span> <span class="toc-text">output</span></a></li></ol>
+  
   </div>
 
 <div id="asidepart">
