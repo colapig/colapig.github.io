@@ -4,13 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Add Two Numbers | COLAPIG</title>
+    <title>Remove K Digits &amp; Is Palindrome &amp; Roman to Integer | COLAPIG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Gee">
     
-    <meta name="description" content="链表的操作，add的时候，先把p.next赋值（p.next.next指向空），然后p = p.next移动指针； 删除的时候用一个p指向原链表t，temp先指向要删除节点的t.next, 然后p.next = temp, 然后释放temp。写的很艰难。。。
-Add Two Numbers输入2个链">
+    <meta name="description" content="停了2天，补上。二三题是水题。
+找出符合题意的上升子序列，如果第一位为0就舍弃。
+123456789101112131415161718public static String removeKdigits(String num, int k) &amp;#123;           StringBuild">
     
     
     
@@ -66,15 +67,15 @@ Add Two Numbers输入2个链">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/10/31/Add-Two-Numbers/" title="Add Two Numbers" itemprop="url">Add Two Numbers</a>
+      <a href="/2016/11/04/Remove-K-Digits/" title="Remove K Digits &amp; Is Palindrome &amp; Roman to Integer" itemprop="url">Remove K Digits &amp; Is Palindrome &amp; Roman to Integer</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://colapig.github.io" title="Gee">Gee</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-10-30T16:33:22.000Z" itemprop="datePublished">2016-10-31</time>
-    Updated:<time datetime="2016-10-30T16:53:39.000Z" itemprop="dateModified">2016-10-31</time>
+    <time datetime="2016-11-03T16:28:19.000Z" itemprop="datePublished">2016-11-04</time>
+    Updated:<time datetime="2016-11-04T12:45:45.000Z" itemprop="dateModified">2016-11-04</time>
     
   </p>
 </header>
@@ -83,55 +84,36 @@ Add Two Numbers输入2个链">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Add-Two-Numbers"><span class="toc-number">1.</span> <span class="toc-text">Add Two Numbers</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#input"><span class="toc-number">1.1.</span> <span class="toc-text">input</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#output"><span class="toc-number">2.</span> <span class="toc-text">output</span></a></li></ol>
+		
 		</div>
 		
-		<p>链表的操作，add的时候，先把p.next赋值（p.next.next指向空），然后p = p.next移动指针； 删除的时候用一个p指向原链表t，temp先指向要删除节点的t.next, 然后p.next = temp, 然后释放temp。<br>写的很艰难。。。</p>
-<h3 id="Add-Two-Numbers"><a href="#Add-Two-Numbers" class="headerlink" title="Add Two Numbers"></a>Add Two Numbers</h3><p>输入2个链表，由低位到高位，实现相加操作。</p>
-<p>Input: (2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)<br>Output: 7 -&gt; 0 -&gt; 8</p>
-<h4 id="input"><a href="#input" class="headerlink" title="input"></a>input</h4><p>[2,4,3]<br>[5,6,4]</p>
-<h3 id="output"><a href="#output" class="headerlink" title="output"></a>output</h3><p>[7,0,8]</p>
-<pre><code class="java"><span class="comment">/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) { val = x; }
- * }
- */</span>
+		<p>停了2天，补上。二三题是水题。</p>
+<p>找出符合题意的上升子序列，如果第一位为0就舍弃。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">removeKdigits</span><span class="params">(String num, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">           StringBuilder sb = <span class="keyword">new</span> StringBuilder(num);</span><br><span class="line">           <span class="keyword">while</span> ( k &gt; <span class="number">0</span>) &#123;</span><br><span class="line">               <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">               <span class="keyword">while</span>(i &lt; sb.length() -<span class="number">1</span> &amp;&amp; sb.charAt(i) &lt;= sb.charAt(i+<span class="number">1</span>))&#123;</span><br><span class="line">                   i++;</span><br><span class="line">               &#125;</span><br><span class="line">               sb.deleteCharAt(i);</span><br><span class="line">               k--;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">while</span> (sb.length() &gt; <span class="number">1</span> &amp;&amp; sb.charAt(<span class="number">0</span>) == <span class="string">'0'</span>)&#123;</span><br><span class="line">               sb.deleteCharAt(<span class="number">0</span>);</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (sb.length() == <span class="number">0</span>)&#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="string">"0"</span>;</span><br><span class="line">           &#125;  </span><br><span class="line">          <span class="keyword">return</span> sb.toString();</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<p>判断一个数是不是回文数（可以优化，不用判断全部长度，按奇偶判断。）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isPalindrome</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>( x &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        String s = Integer.toString(x);</span><br><span class="line">        <span class="keyword">int</span> len = s.length();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(s.charAt(i) != s.charAt(len -<span class="number">1</span>-i))&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>将一个不超过3999的罗马数字转化为整数。</p>
+<pre><code class="java"><span class="keyword">import</span> java.util.*;
+
 <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    <span class="function"><span class="keyword">public</span> ListNode <span class="title">addTwoNumbers</span><span class="params">(ListNode l1, ListNode l2)</span> </span>{
-         <span class="keyword">if</span>( <span class="keyword">null</span> == l1 ){
-                <span class="keyword">return</span> l2;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">romanToInt</span><span class="params">(String s)</span> </span>{
+        Map&lt;String, Integer&gt;roman = <span class="keyword">new</span> HashMap&lt;String, Integer&gt;();
+        roman.put(<span class="string">"I"</span>, <span class="number">1</span>);
+        roman.put(<span class="string">"V"</span>, <span class="number">5</span>);
+        roman.put(<span class="string">"X"</span>, <span class="number">10</span>);
+        roman.put(<span class="string">"L"</span>, <span class="number">50</span>);
+        roman.put(<span class="string">"C"</span>, <span class="number">100</span>);
+        roman.put(<span class="string">"D"</span>, <span class="number">500</span>);
+        roman.put(<span class="string">"M"</span>, <span class="number">1000</span>);
+        <span class="keyword">int</span> c = roman.get(<span class="string">""</span>+s.charAt(<span class="number">0</span>)); 
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; s.length(); i++){
+            <span class="keyword">if</span>(roman.get(<span class="string">""</span>+s.charAt(i)) &gt; roman.get(<span class="string">""</span>+s.charAt(i-<span class="number">1</span>))){
+                c += roman.get(<span class="string">""</span>+s.charAt(i));
+            }<span class="keyword">else</span>{
+                c += roman.get(<span class="string">""</span>+s.charAt(i)) - <span class="number">2</span> * roman.get(<span class="string">""</span>+s.charAt(i));
             }
-        <span class="keyword">if</span>( <span class="keyword">null</span> == l2){
-                <span class="keyword">return</span> l1;
-            }
-        <span class="keyword">int</span> temp = <span class="number">0</span>;
-        ListNode res = <span class="keyword">new</span> ListNode(<span class="number">0</span>);
-        ListNode p1 = l1, p2 = l2, p3 = res;
-        <span class="keyword">while</span>(p1 != <span class="keyword">null</span> || p2 != <span class="keyword">null</span>){ <span class="comment">//开始移动指针</span>
-            <span class="keyword">if</span>(<span class="keyword">null</span> != p1){
-                temp += p1.val;
-                p1 = p1.next;    
-            }
-
-            <span class="keyword">if</span>(<span class="keyword">null</span> != p2){
-                temp += p2.val;
-                p2 = p2.next;      
-            }
-
-            p3.val = temp % <span class="number">10</span>; <span class="comment">// p1 + p2</span>
-            <span class="keyword">if</span>(<span class="keyword">null</span> != p1 || <span class="keyword">null</span> != p2){
-                p3.next = <span class="keyword">new</span> ListNode(temp / <span class="number">10</span>); <span class="comment">//如果l1,p2没到头，则需要继续计算</span>
-                p3 = p3.next; 
-            }
-            temp = temp / <span class="number">10</span>;<span class="comment">// 如果需要进位，temp为1</span>
         }
-        <span class="keyword">if</span> (temp == <span class="number">1</span>){
-            p3.next = <span class="keyword">new</span> ListNode(<span class="number">1</span>); <span class="comment">//最后可能需要进位</span>
-        }
-        <span class="keyword">return</span> res;
+        <span class="keyword">return</span> c;
     }
 }
 </code></pre>
@@ -149,7 +131,7 @@ Add Two Numbers输入2个链">
 
 <div class="article-share" id="share">
 
-  <div data-url="http://colapig.github.io/2016/10/31/Add-Two-Numbers/" data-title="Add Two Numbers | COLAPIG" data-tsina="null" class="share clearfix">
+  <div data-url="http://colapig.github.io/2016/11/04/Remove-K-Digits/" data-title="Remove K Digits &amp; Is Palindrome &amp; Roman to Integer | COLAPIG" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -158,19 +140,11 @@ Add Two Numbers输入2个链">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/10/31/Longest-Substring-Without-Repeating-Characters/" title="Longest Substring Without Repeating Characters">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  Longest Substring Without Repeating Characters</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/10/30/twosum/"  title="Two Sum">
+<a href="/2016/11/01/ZigZag-Conversion/"  title="ZigZag Conversion">
  <strong>NEXT:</strong><br/> 
- <span>Two Sum
+ <span>ZigZag Conversion
 </span>
 </a>
 </div>
@@ -187,7 +161,7 @@ Add Two Numbers输入2个链">
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Add-Two-Numbers"><span class="toc-number">1.</span> <span class="toc-text">Add Two Numbers</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#input"><span class="toc-number">1.1.</span> <span class="toc-text">input</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#output"><span class="toc-number">2.</span> <span class="toc-text">output</span></a></li></ol>
+  
   </div>
 
 <div id="asidepart">
