@@ -4,14 +4,12 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Remove K Digits &amp; Is Palindrome &amp; Roman to Integer | COLAPIG</title>
+    <title>Container With Most Water | COLAPIG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Gee">
     
-    <meta name="description" content="停了2天，补上。二三题是水题。
-找出符合题意的上升子序列，如果第一位为0就舍弃。
-123456789101112131415161718public static String removeKdigits(String num, int k) &amp;#123;           StringBuild">
+    <meta name="description" content="开始用遍历，最后一组数据超时了。然后看了一下题解。。。用2个指针i，j指向头尾。要使面积增大，要么增加长度，要么增加高度。当长度为头尾时最长。当i，j向中间移动时，要使面积增大，则高度要增大。所以，当i,j处于最优位置的时候，假设i &amp;lt; j，在j的右边，没有比j更高的长度了。在i的左边，没有比">
     
     
     
@@ -67,15 +65,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/11/04/Remove-K-Digits/" title="Remove K Digits &amp; Is Palindrome &amp; Roman to Integer" itemprop="url">Remove K Digits &amp; Is Palindrome &amp; Roman to Integer</a>
+      <a href="/2016/11/05/Container-With-Most-Water/" title="Container With Most Water" itemprop="url">Container With Most Water</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://colapig.github.io" title="Gee">Gee</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-11-03T16:28:19.000Z" itemprop="datePublished">2016-11-04</time>
-    Updated:<time datetime="2016-11-04T12:57:06.000Z" itemprop="dateModified">2016-11-04</time>
+    <time datetime="2016-11-05T12:56:16.000Z" itemprop="datePublished">2016-11-05</time>
+    Updated:<time datetime="2016-11-05T13:13:42.000Z" itemprop="dateModified">2016-11-05</time>
     
   </p>
 </header>
@@ -87,34 +85,26 @@
 		
 		</div>
 		
-		<p>停了2天，补上。二三题是水题。</p>
-<p>找出符合题意的上升子序列，如果第一位为0就舍弃。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">removeKdigits</span><span class="params">(String num, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">           StringBuilder sb = <span class="keyword">new</span> StringBuilder(num);</span><br><span class="line">           <span class="keyword">while</span> ( k &gt; <span class="number">0</span>) &#123;</span><br><span class="line">               <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">               <span class="keyword">while</span>(i &lt; sb.length() -<span class="number">1</span> &amp;&amp; sb.charAt(i) &lt;= sb.charAt(i+<span class="number">1</span>))&#123;</span><br><span class="line">                   i++;</span><br><span class="line">               &#125;</span><br><span class="line">               sb.deleteCharAt(i);</span><br><span class="line">               k--;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">while</span> (sb.length() &gt; <span class="number">1</span> &amp;&amp; sb.charAt(<span class="number">0</span>) == <span class="string">'0'</span>)&#123;</span><br><span class="line">               sb.deleteCharAt(<span class="number">0</span>);</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (sb.length() == <span class="number">0</span>)&#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="string">"0"</span>;</span><br><span class="line">           &#125;  </span><br><span class="line">          <span class="keyword">return</span> sb.toString();</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
-<p>判断一个数是不是回文数（可以优化，不用判断全部长度，按奇偶判断。）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isPalindrome</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>( x &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        String s = Integer.toString(x);</span><br><span class="line">        <span class="keyword">int</span> len = s.length();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(s.charAt(i) != s.charAt(len -<span class="number">1</span>-i))&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>将一个不超过3999的罗马数字转化为整数。</p>
-<pre><code class="java"><span class="keyword">import</span> java.util.*;
+		<p>开始用遍历，最后一组数据超时了。<br>然后看了一下题解。。。<br>用2个指针i，j指向头尾。要使面积增大，要么增加长度，要么增加高度。当长度为头尾时最长。<br>当i，j向中间移动时，要使面积增大，则高度要增大。<br>所以，当i,j处于最优位置的时候，假设i &lt; j，在j的右边，没有比j更高的长度了。在i的左边，没有比更高的长度了。<br>             |<br>     |       |<br>|—-|——-|——|—<br>i            j</p>
+<pre><code class="java"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>{
+     <span class="keyword">int</span> maxS = <span class="number">0</span>;
+     <span class="keyword">int</span> temp = <span class="number">0</span>;
+     <span class="keyword">int</span> i = <span class="number">0</span>, j = height.length -<span class="number">1</span>;
+     <span class="keyword">while</span>(i &lt; j){
+         temp = min(height[j],height[i]) * (j - i);
+         maxS =  temp &gt; maxS ?  temp : maxS;
+         <span class="keyword">if</span>(height[i] &gt; height[j]){
+             j--;
+         }<span class="keyword">else</span>{
+             i++;
+         }
 
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">romanToInt</span><span class="params">(String s)</span> </span>{
-        Map&lt;String, Integer&gt;roman = <span class="keyword">new</span> HashMap&lt;String, Integer&gt;();
-        roman.put(<span class="string">"I"</span>, <span class="number">1</span>);
-        roman.put(<span class="string">"V"</span>, <span class="number">5</span>);
-        roman.put(<span class="string">"X"</span>, <span class="number">10</span>);
-        roman.put(<span class="string">"L"</span>, <span class="number">50</span>);
-        roman.put(<span class="string">"C"</span>, <span class="number">100</span>);
-        roman.put(<span class="string">"D"</span>, <span class="number">500</span>);
-        roman.put(<span class="string">"M"</span>, <span class="number">1000</span>);
-        <span class="keyword">int</span> c = roman.get(<span class="string">""</span>+s.charAt(<span class="number">0</span>)); 
-        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; s.length(); i++){
-            <span class="keyword">if</span>(roman.get(<span class="string">""</span>+s.charAt(i)) &gt; roman.get(<span class="string">""</span>+s.charAt(i-<span class="number">1</span>)) &amp;&amp; ((s.charAt(i-<span class="number">1</span>) == <span class="string">'I'</span>) || (s.charAt(i-<span class="number">1</span>) == <span class="string">'X'</span>) ||(s.charAt(i-<span class="number">1</span>) == <span class="string">'C'</span>))){
-                c += roman.get(<span class="string">""</span>+s.charAt(i));
-            }<span class="keyword">else</span>{
-                c += roman.get(<span class="string">""</span>+s.charAt(i)) - <span class="number">2</span> * roman.get(<span class="string">""</span>+s.charAt(i));
-            }
-        }
-        <span class="keyword">return</span> c;
-    }
+     }
+     <span class="keyword">return</span> maxS;
+ }
+
+ <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">min</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>{
+    <span class="keyword">return</span> a &lt;= b ? a : b;    
 }
 </code></pre>
   
@@ -131,7 +121,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://colapig.github.io/2016/11/04/Remove-K-Digits/" data-title="Remove K Digits &amp; Is Palindrome &amp; Roman to Integer | COLAPIG" data-tsina="null" class="share clearfix">
+  <div data-url="http://colapig.github.io/2016/11/05/Container-With-Most-Water/" data-title="Container With Most Water | COLAPIG" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -140,19 +130,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/11/05/Container-With-Most-Water/" title="Container With Most Water">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  Container With Most Water</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/11/01/ZigZag-Conversion/"  title="ZigZag Conversion">
+<a href="/2016/11/04/Remove-K-Digits/"  title="Remove K Digits &amp; Is Palindrome &amp; Roman to Integer">
  <strong>NEXT:</strong><br/> 
- <span>ZigZag Conversion
+ <span>Remove K Digits &amp; Is Palindrome &amp; Roman to Integer
 </span>
 </a>
 </div>
