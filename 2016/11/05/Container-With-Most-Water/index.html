@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Container With Most Water | COLAPIG</title>
+    <title>Container With Most Water &amp; | COLAPIG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Gee">
@@ -65,7 +65,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/11/05/Container-With-Most-Water/" title="Container With Most Water" itemprop="url">Container With Most Water</a>
+      <a href="/2016/11/05/Container-With-Most-Water/" title="Container With Most Water &amp;" itemprop="url">Container With Most Water &amp;</a>
   </h1>
   <p class="article-author">By
     
@@ -73,7 +73,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-11-05T12:56:16.000Z" itemprop="datePublished">2016-11-05</time>
-    Updated:<time datetime="2016-11-05T13:13:42.000Z" itemprop="dateModified">2016-11-05</time>
+    Updated:<time datetime="2016-11-05T15:37:56.000Z" itemprop="dateModified">2016-11-05</time>
     
   </p>
 </header>
@@ -107,6 +107,17 @@
     <span class="keyword">return</span> a &lt;= b ? a : b;    
 }
 </code></pre>
+<p>判断2个二叉树是不是相等  </p>
+<pre><code class="java"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSameTree</span><span class="params">(TreeNode p, TreeNode q)</span> </span>{
+       <span class="keyword">if</span>(<span class="keyword">null</span> == p &amp;&amp; <span class="keyword">null</span> == q){
+           <span class="keyword">return</span> <span class="keyword">true</span>;
+       }
+       <span class="keyword">if</span>(<span class="keyword">null</span> == p || <span class="keyword">null</span> == q){
+           <span class="keyword">return</span> <span class="keyword">false</span>;
+       }
+       <span class="keyword">return</span> p.val == q.val &amp;&amp; isSameTree(p.left, q.left) &amp;&amp; isSameTree(p.right, q.right);
+   }
+</code></pre>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -121,7 +132,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://colapig.github.io/2016/11/05/Container-With-Most-Water/" data-title="Container With Most Water | COLAPIG" data-tsina="null" class="share clearfix">
+  <div data-url="http://colapig.github.io/2016/11/05/Container-With-Most-Water/" data-title="Container With Most Water &amp; | COLAPIG" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
