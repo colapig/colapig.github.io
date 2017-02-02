@@ -1,0 +1,447 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Log4j&amp;Logback使用笔记 | COLAPIG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Gee">
+    
+    <meta name="description" content="log4j组件如上图
+定义一个logger12345678910private static final Logger logger = LogManager.getLogger(AndroidQueryServiceImpl.class);```  LogManager.getLogger会指定l">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/z.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/head.png" alt="COLAPIG" title="COLAPIG"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="COLAPIG">COLAPIG</a></h1>
+				<h2 class="blog-motto">A pig like drinking cola</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:colapig.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/02/02/Log4j/" title="Log4j&amp;Logback使用笔记" itemprop="url">Log4j&amp;Logback使用笔记</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://colapig.github.io" title="Gee">Gee</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-02-02T07:05:47.000Z" itemprop="datePublished">2017-02-02</time>
+    Updated:<time datetime="2017-02-02T08:18:53.000Z" itemprop="dateModified">2017-02-02</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义一个logger"><span class="toc-number">1.</span> <span class="toc-text">定义一个logger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logger的配置-–-决定输出级别"><span class="toc-number">2.</span> <span class="toc-text">logger的配置 – 决定输出级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#appender的配置-–-决定输出位置"><span class="toc-number">3.</span> <span class="toc-text">appender的配置 – 决定输出位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#layout的配置-–-决定输出格式"><span class="toc-number">4.</span> <span class="toc-text">layout的配置 – 决定输出格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logger工作流程"><span class="toc-number">5.</span> <span class="toc-text">logger工作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些注意点"><span class="toc-number">6.</span> <span class="toc-text">一些注意点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Refers"><span class="toc-number">7.</span> <span class="toc-text">Refers</span></a></li></ol>
+		</div>
+		
+		<p><img src="http://logging.apache.org/log4j/2.x/images/Log4jClasses.jpg" alt="log4j组件"><br>log4j组件如上图</p>
+<h2 id="定义一个logger"><a href="#定义一个logger" class="headerlink" title="定义一个logger"></a>定义一个logger</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LogManager.getLogger(AndroidQueryServiceImpl.class);</span><br><span class="line">```  </span><br><span class="line">LogManager.getLogger会指定logger的名称。一般取类的名称，也可以指定特定的名称，如：  </span><br><span class="line">``` </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger tracerlogger = LogManager.getLogger(<span class="string">"tracer-business"</span>);</span><br><span class="line">```  </span><br><span class="line">如果取相同的名称，则x,y指向同一个logger对象，如：</span><br><span class="line">``` </span><br><span class="line">Logger x = LogManager.getLogger(<span class="string">"wombat"</span>);</span><br><span class="line">Logger y = LogManager.getLogger(<span class="string">"wombat"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="logger的配置-–-决定输出级别"><a href="#logger的配置-–-决定输出级别" class="headerlink" title="logger的配置 – 决定输出级别"></a>logger的配置 – 决定输出级别</h2><ul>
+<li>logger的日志级别分为TRACE, DEBUG, INFO, WARN, ERROR, and FATAL。</li>
+<li>logger的日志级别有继承关系。如果x是y的父类，则y继承x的日志级别，除非重新指定。</li>
+<li>继承时会继承关系最近一级指定的级别，如：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Logger name</th>
+<th style="text-align:center">Assigned level</th>
+<th style="text-align:right">Effective level</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>root</td>
+<td style="text-align:center">DEBUG</td>
+<td style="text-align:right">DEBUG</td>
+</tr>
+<tr>
+<td>X</td>
+<td style="text-align:center">INFO</td>
+<td style="text-align:right">INFO</td>
+</tr>
+<tr>
+<td>X.Y</td>
+<td style="text-align:center">none</td>
+<td style="text-align:right">INFO</td>
+</tr>
+<tr>
+<td>X.Y.Z</td>
+<td style="text-align:center">ERROR</td>
+<td style="text-align:right">ERROR</td>
+</tr>
+</tbody>
+</table>
+<h2 id="appender的配置-–-决定输出位置"><a href="#appender的配置-–-决定输出位置" class="headerlink" title="appender的配置 – 决定输出位置"></a>appender的配置 – 决定输出位置</h2><ul>
+<li>一个logger可以被输出多次，取决于其appender的配置。</li>
+<li>一个logger L的输出状态会被它的appender以及其祖先的appender的状态决定。这被称为“appender additivity”。</li>
+<li>因此，如果不想继承其上部分的appender的状态，需将“additivity flag”设置为false。（否则可能会导致相同日志输出好几遍）</li>
+<li>However, if an ancestor of logger L, say P, has the additivity flag set to false, then L’s output will be directed to all the appenders in L and its ancestors up to and including P but not the appenders in any of the ancestors of P. <font color="#FF0000">Loggers have their additivity flag set to true by default.</font> </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Logger Name</th>
+<th style="text-align:center">Attached Appenders</th>
+<th style="text-align:right">Additivity Flag</th>
+<th style="text-align:right">Output Targets</th>
+<th style="text-align:right">Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>root</td>
+<td style="text-align:center">A1</td>
+<td style="text-align:right">not applicable</td>
+<td style="text-align:right">A1</td>
+<td style="text-align:right">Since the root logger stands at the top of the logger hierarchy, the additivity flag does not apply to it.</td>
+</tr>
+<tr>
+<td>x</td>
+<td style="text-align:center">A-x1, A-x2</td>
+<td style="text-align:right">true</td>
+<td style="text-align:right">A1, A-x1, A-x2</td>
+<td style="text-align:right">Appenders of “x” and of root.</td>
+</tr>
+<tr>
+<td>x.y</td>
+<td style="text-align:center">none</td>
+<td style="text-align:right">true</td>
+<td style="text-align:right">A1, A-x1, A-x2</td>
+<td style="text-align:right">Appenders of “x” and of root.</td>
+</tr>
+<tr>
+<td>x.y.z</td>
+<td style="text-align:center">A-xyz1</td>
+<td style="text-align:right">true</td>
+<td style="text-align:right">A1, A-x1, A-x2, A-xyz1</td>
+<td style="text-align:right">Appenders of “x.y.z”, “x” and of root.</td>
+</tr>
+<tr>
+<td>security</td>
+<td style="text-align:center">A-sec</td>
+<td style="text-align:right">false</td>
+<td style="text-align:right">A-sec</td>
+<td style="text-align:right">因为设置了false, 只会使用 appender A-sec。</td>
+</tr>
+<tr>
+<td>security.access</td>
+<td style="text-align:center">none</td>
+<td style="text-align:right">true</td>
+<td style="text-align:right">A-sec</td>
+<td style="text-align:right">继承父类，只会使用 appender A-sec，因为其父类设置了false.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="layout的配置-–-决定输出格式"><a href="#layout的配置-–-决定输出格式" class="headerlink" title="layout的配置 – 决定输出格式"></a>layout的配置 – 决定输出格式</h2><p>PatternLayout可以指定输出日志的格式，如：<br><code>%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{requestURIWithQueryString}]%-5level %logger{20} - %msg%n</code><br>各参数的含义详见： <a href="https://logback.qos.ch/manual/layouts.html#conversionWord" target="_blank" rel="external">conversionWord</a></p>
+<h2 id="logger工作流程"><a href="#logger工作流程" class="headerlink" title="logger工作流程"></a>logger工作流程</h2><p>以打印<code>logger.info(&quot;The new entry is {}.&quot;, entry);</code>为例</p>
+<ul>
+<li>先过fliter信息，如Marker, Level, Logger，message等。若通过，则进行下一步。</li>
+<li>判断effective logger与当前logger等级的关系。如通过，则进行下一步。</li>
+<li>创建loggingEvent对象，包括当前logger的信息，比如当前时间，线程，级别，logger等信息</li>
+<li>引用appenders</li>
+<li>格式化输出</li>
+<li>将loggingEvent输出到对应的appenders</li>
+</ul>
+<h2 id="一些注意点"><a href="#一些注意点" class="headerlink" title="一些注意点"></a>一些注意点</h2><ul>
+<li>当加入多个参数时，如<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.debug(<span class="string">"Entry number: "</span> + i + <span class="string">" is "</span> + String.valueOf(entry[i]));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>不管该日志是否会被打印出来，都会进行参数的拼接。因此为了减小开销，可以用isDebugEnabled()先判断一下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(logger.isDebugEnabled()) &#123;</span><br><span class="line">     logger.debug(<span class="string">"Entry number: "</span> + i + <span class="string">" is "</span> + String.valueOf(entry[i]));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>使用{}进行format则可以提升性能。在debug被禁止的情况下，用2比1快30%。（format先判断再替换）<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">  logger.debug(<span class="string">"The new entry is "</span>+entry+<span class="string">"."</span>); </span><br><span class="line">  logger.debug(<span class="string">"The new entry is &#123;&#125;."</span>, entry); </span><br><span class="line">```　</span><br><span class="line">* 如果需要多个参数（<span class="number">2</span>个以上），可以使用一个array。如果在后面使用多个元素，其实也是调用的array方法，一样的。</span><br><span class="line">`</span><br><span class="line">logger.debug(<span class="string">"Value &#123;&#125; was inserted between &#123;&#125; and &#123;&#125;."</span>, paramArray);</span><br><span class="line">`</span><br><span class="line">* 落本地盘比较快，落数据库慢</span><br><span class="line">* 使用量大的循环里尽量不要打log</span><br><span class="line">* 打印error堆栈信息的时候，可以用logger.error(<span class="string">"error :"</span>, e); 而不要用 logger.error(<span class="string">"error"</span> +e); 否则打印不出堆栈。</span><br><span class="line"></span><br><span class="line">logger.error(String msg, Throwable t)自己实现了e.printStackTrace();</span><br><span class="line">和用stringBuilder写<span class="keyword">for</span>循环相比，应该也不会占用很多资源。(没有实际验证过)  </span><br><span class="line"></span><br><span class="line">``` <span class="function">java</span><br><span class="line">	 <span class="keyword">public</span> <span class="title">ThrowableProxy</span><span class="params">(Throwable throwable)</span> </span>&#123;</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">this</span>.throwable = throwable;</span><br><span class="line">    <span class="keyword">this</span>.className = throwable.getClass().getName();</span><br><span class="line">    <span class="keyword">this</span>.message = throwable.getMessage();</span><br><span class="line">    <span class="keyword">this</span>.stackTraceElementProxyArray = ThrowableProxyUtil.steArrayToStepArray(throwable</span><br><span class="line">        .getStackTrace());</span><br><span class="line">    </span><br><span class="line">    Throwable nested = throwable.getCause();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (nested != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">this</span>.cause = <span class="keyword">new</span> ThrowableProxy(nested);</span><br><span class="line">      <span class="keyword">this</span>.cause.commonFrames = ThrowableProxyUtil</span><br><span class="line">          .findNumberOfCommonFrames(nested.getStackTrace(),</span><br><span class="line">              stackTraceElementProxyArray);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(GET_SUPPRESSED_METHOD != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="comment">// this will only execute on Java 7</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        Object obj = GET_SUPPRESSED_METHOD.invoke(throwable);</span><br><span class="line">        <span class="keyword">if</span>(obj <span class="keyword">instanceof</span> Throwable[]) &#123;</span><br><span class="line">          Throwable[] throwableSuppressed = (Throwable[]) obj;</span><br><span class="line">          <span class="keyword">if</span>(throwableSuppressed.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            suppressed = <span class="keyword">new</span> ThrowableProxy[throwableSuppressed.length];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;throwableSuppressed.length;i++) &#123;</span><br><span class="line">              <span class="keyword">this</span>.suppressed[i] = <span class="keyword">new</span> ThrowableProxy(throwableSuppressed[i]);</span><br><span class="line">              <span class="keyword">this</span>.suppressed[i].commonFrames = ThrowableProxyUtil</span><br><span class="line">                  .findNumberOfCommonFrames(throwableSuppressed[i].getStackTrace(),</span><br><span class="line">                      stackTraceElementProxyArray);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">        <span class="comment">// ignore</span></span><br><span class="line">      &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">        <span class="comment">// ignore</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Refers"><a href="#Refers" class="headerlink" title="Refers"></a>Refers</h2><p><a href="https://logback.qos.ch/manual/architecture.html" target="_blank" rel="external">logback Manual</a>  </p>
+<p><a href="http://logging.apache.org/log4j/2.x/manual/architecture.html" target="_blank" rel="external">log4j 2</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://colapig.github.io/2017/02/02/Log4j/" data-title="Log4j&amp;Logback使用笔记 | COLAPIG" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/01/20/java里的Integer-bitCount/"  title="java里的Integer.bitCount">
+ <strong>NEXT:</strong><br/> 
+ <span>java里的Integer.bitCount
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义一个logger"><span class="toc-number">1.</span> <span class="toc-text">定义一个logger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logger的配置-–-决定输出级别"><span class="toc-number">2.</span> <span class="toc-text">logger的配置 – 决定输出级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#appender的配置-–-决定输出位置"><span class="toc-number">3.</span> <span class="toc-text">appender的配置 – 决定输出位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#layout的配置-–-决定输出格式"><span class="toc-number">4.</span> <span class="toc-text">layout的配置 – 决定输出格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logger工作流程"><span class="toc-number">5.</span> <span class="toc-text">logger工作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些注意点"><span class="toc-number">6.</span> <span class="toc-text">一些注意点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Refers"><span class="toc-number">7.</span> <span class="toc-text">Refers</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/js/" title="js">js<sup>1</sup></a></li>
+		
+			<li><a href="/tags/leetcode/" title="leetcode">leetcode<sup>6</sup></a></li>
+		
+			<li><a href="/tags/mooc/" title="mooc">mooc<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://kinva.cc" target="_blank" title="YangJian">迪拜小王子</a></li>
+    </ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A lazy pig drinking lots of cola <br/>
+			Specialized in writing BUGs</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/colapig" target="_blank" title="github"></a>
+		
+		
+		<a href="https://www.facebook.com/gee.zhang.3" target="_blank" title="facebook"></a>
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2017 
+		
+		<a href="http://colapig.github.io" target="_blank" title="Gee">Gee</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

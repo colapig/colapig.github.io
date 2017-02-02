@@ -4,13 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>超星mooc视频快速完成 | COLAPIG</title>
+    <title>java里的Integer.bitCount | COLAPIG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Gee">
     
-    <meta name="description" content="基友选了mooc的课，然后问我有木有啥办法快速看完里面的视频。
-拿来研究了一下，发现在看视频的时候，每秒会向服务器发一个请求，比如：https://mooc1-1.chaoxing.com/multimedia/log/836ded1fb7ae2f213ffad6432d9727c4?duratio">
+    <meta name="description" content="* 如何判断一个数里面有几个1？
+Java里有个方法“Integer.bitCount(int x)”可以计算出一个数二进制里1的个数
+123456789public static int bitCount(int i) &amp;#123;      // HD, Figure 5-2      i = ">
     
     
     
@@ -66,15 +67,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/01/14/超星mooc视频快速完成/" title="超星mooc视频快速完成" itemprop="url">超星mooc视频快速完成</a>
+      <a href="/2017/01/20/java里的Integer-bitCount/" title="java里的Integer.bitCount" itemprop="url">java里的Integer.bitCount</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://colapig.github.io" title="Gee">Gee</a>
     </p>
   <p class="article-time">
-    <time datetime="2017-01-14T07:01:23.000Z" itemprop="datePublished">2017-01-14</time>
-    Updated:<time datetime="2017-01-14T07:17:16.000Z" itemprop="dateModified">2017-01-14</time>
+    <time datetime="2017-01-20T03:38:32.000Z" itemprop="datePublished">2017-01-20</time>
+    Updated:<time datetime="2017-01-22T09:35:44.000Z" itemprop="dateModified">2017-01-22</time>
     
   </p>
 </header>
@@ -86,28 +87,22 @@
 		
 		</div>
 		
-		<p>基友选了mooc的课，然后问我有木有啥办法快速看完里面的视频。</p>
-<p>拿来研究了一下，发现在看视频的时候，每秒会向服务器发一个请求，比如：<a href="https://mooc1-1.chaoxing.com/multimedia/log/836ded1fb7ae2f213ffad6432d9727c4?duration=779&amp;otherInfo=nodeId_88240978&amp;userid=XXX&amp;rt=0.9&amp;clipTime=0_779&amp;dtype=Video&amp;objectId=49380ee765563cc0d56c74f2a8d24eea&amp;clazzId=1050949&amp;jobid=1467602883583&amp;view=pc&amp;playingTime=776&amp;isdrag=3&amp;enc=d7c883e970e7ed57654df21167b34962" target="_blank" rel="external">https://mooc1-1.chaoxing.com/multimedia/log/836ded1fb7ae2f213ffad6432d9727c4?duration=779&amp;otherInfo=nodeId_88240978&amp;userid=XXX&amp;rt=0.9&amp;clipTime=0_779&amp;dtype=Video&amp;objectId=49380ee765563cc0d56c74f2a8d24eea&amp;clazzId=1050949&amp;jobid=1467602883583&amp;view=pc&amp;playingTime=776&amp;isdrag=3&amp;enc=d7c883e970e7ed57654df21167b34962</a></p>
-<p>服务端会返回一个结果，{isPassed:true/false}。<br>所以，视频有没有看完就是通过这个链接来判断的。</p>
-<p>很容易发现，playingTime是播放时间，duration是视频时长。所以只要playingTime=duration就是视频放完了。<br>实际测试的时候发现playingTime&lt;=duration，也是可以通过的，只要playingTime大于最后一道题的时间点即可。</p>
-<p>enc是一个用来校验合法性的参数。由于每次都会变化，且请求里没有获取到这个参数，猜想加密算法在本地。<br>然而搜遍了所有js都没有找到enc的生成方式。</p>
-<p>就在要放弃之际。。。发现禁用了js以后视频还能检测到鼠标不在播放器区域。。。突然想到应该是在flash里检测的，那加密算法是不是也在里面。<br>于是下载了player_4.0.11.swf文件，反编译之后…果然找到了答案。</p>
-<p>下面是生成链接的代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">url = <span class="string">"https://mooc1-1.chaoxing.com/multimedia/log/836ded1fb7ae2f213ffad6432d9727c4?duration=779&amp;otherInfo=nodeId_88240978&amp;userid=XXX&amp;rt=0.9&amp;clipTime=0_779&amp;dtype=Video&amp;objectId=49380ee765563cc0d56c74f2a8d24eea&amp;clazzId=1050949&amp;jobid=1467602883583&amp;view=pc&amp;playingTime=776&amp;isdrag=3&amp;enc=d7c883e970e7ed57654df21167b34962"</span></span><br><span class="line">temp = url.split(<span class="string">'?'</span>)</span><br><span class="line">jsonStr = <span class="string">'&#123;"'</span> + temp[<span class="number">1</span>].replace(<span class="string">'='</span>,<span class="string">'":"'</span>).replace(<span class="string">'&amp;'</span>,<span class="string">'", "'</span>) +<span class="string">'"&#125;'</span></span><br><span class="line">js = json.loads(jsonStr) </span><br><span class="line">time = js[<span class="string">"duration"</span>] //可以减去一个随机数</span><br><span class="line">clazzId = js[<span class="string">"clazzId"</span>]</span><br><span class="line">userid = js[<span class="string">"userid"</span>]</span><br><span class="line">jobid = js[<span class="string">"jobid"</span>]</span><br><span class="line">objectId = js[<span class="string">"objectId"</span>]</span><br><span class="line">n = time * <span class="number">1000</span></span><br><span class="line">duration = int(js[<span class="string">"duration"</span>]) * <span class="number">1000</span></span><br><span class="line">clipTime = js[<span class="string">"clipTime"</span>]</span><br><span class="line">pwdStr = <span class="string">"[%s][%s][%s][%s][%s][d_yHJ!$pdA~5][%s][%s]"</span> % (clazzId, userid, jobid, objectId, n , duration, clipTime)</span><br><span class="line"><span class="keyword">print</span> pwsStr</span><br><span class="line">m2 = hashlib.md5()</span><br><span class="line">m2.update(pwdStr)</span><br><span class="line">js[<span class="string">"playingTime"</span>] = time</span><br><span class="line">js[<span class="string">"enc"</span>] = m2.hexdigest()</span><br><span class="line">param = <span class="string">"?"</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> js:</span><br><span class="line">    param += <span class="string">"%s=%s&amp;"</span> % (j, js[j])</span><br><span class="line">url_new = temp[<span class="number">0</span>] + param</span><br><span class="line"><span class="keyword">print</span> url_new</span><br></pre></td></tr></table></figure></p>
+		<p><em>*</em> 如何判断一个数里面有几个1？</p>
+<p>Java里有个方法“Integer.bitCount(int x)”可以计算出一个数二进制里1的个数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">bitCount</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">      <span class="comment">// HD, Figure 5-2</span></span><br><span class="line">      i = i - ((i &gt;&gt;&gt; <span class="number">1</span>) &amp; <span class="number">0x55555555</span>);</span><br><span class="line">      i = (i &amp; <span class="number">0x33333333</span>) + ((i &gt;&gt;&gt; <span class="number">2</span>) &amp; <span class="number">0x33333333</span>);</span><br><span class="line">      i = (i + (i &gt;&gt;&gt; <span class="number">4</span>)) &amp; <span class="number">0x0f0f0f0f</span>;</span><br><span class="line">      i = i + (i &gt;&gt;&gt; <span class="number">8</span>);</span><br><span class="line">      i = i + (i &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">      <span class="keyword">return</span> i &amp; <span class="number">0x3f</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>感觉很神奇的样子。。。为啥是这样的呢？</p>
+<p>先自己实现一个计算1的方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bitCount</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">32</span>; i++) &#123;</span><br><span class="line">        count += n &amp; <span class="number">1</span>;</span><br><span class="line">        n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，当n较小的时候，n&gt;&gt;1过几次后就变成0了。<br>因此可以改为：（但是速度不会变快哦）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bitCount</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(n != <span class="number">0</span>)&#123;</span><br><span class="line">        count += n &amp; <span class="number">1</span>;</span><br><span class="line">        n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/mooc/">mooc</a>
-  </div>
 
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://colapig.github.io/2017/01/14/超星mooc视频快速完成/" data-title="超星mooc视频快速完成 | COLAPIG" data-tsina="null" class="share clearfix">
+  <div data-url="http://colapig.github.io/2017/01/20/java里的Integer-bitCount/" data-title="java里的Integer.bitCount | COLAPIG" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -117,18 +112,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/01/20/java里的Integer-bitCount/" title="java里的Integer.bitCount">
+ <a href="/2017/02/02/Log4j/" title="Log4j&amp;Logback使用笔记">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  java里的Integer.bitCount</span>
+  Log4j&amp;Logback使用笔记</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/11/05/Container-With-Most-Water/"  title="Container With Most Water &amp;">
+<a href="/2017/01/14/超星mooc视频快速完成/"  title="超星mooc视频快速完成">
  <strong>NEXT:</strong><br/> 
- <span>Container With Most Water &amp;
+ <span>超星mooc视频快速完成
 </span>
 </a>
 </div>
