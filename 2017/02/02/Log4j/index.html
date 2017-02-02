@@ -9,8 +9,8 @@
     
     <meta name="author" content="Gee">
     
-    <meta name="description" content="log4j组件如上图
-定义一个loggerprivate static final Logger logger = LogManager.getLogger(AndroidQueryServiceImpl.class);LogManager.getLogger会指定logger的名称。一般取类的名称">
+    <meta name="description" content="log4j的主要组件如下图：
+定义一个loggerprivate static final Logger logger = LogManager.getLogger(AndroidQueryServiceImpl.class);LogManager.getLogger会指定logger的名称。一般取">
     
     
     
@@ -74,7 +74,7 @@
     </p>
   <p class="article-time">
     <time datetime="2017-02-02T07:05:47.000Z" itemprop="datePublished">2017-02-02</time>
-    Updated:<time datetime="2017-02-02T08:25:24.000Z" itemprop="dateModified">2017-02-02</time>
+    Updated:<time datetime="2017-02-02T08:32:10.000Z" itemprop="dateModified">2017-02-02</time>
     
   </p>
 </header>
@@ -86,7 +86,7 @@
 		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义一个logger"><span class="toc-number">1.</span> <span class="toc-text">定义一个logger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logger的配置-–-决定输出级别"><span class="toc-number">2.</span> <span class="toc-text">logger的配置 – 决定输出级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#appender的配置-–-决定输出位置"><span class="toc-number">3.</span> <span class="toc-text">appender的配置 – 决定输出位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#layout的配置-–-决定输出格式"><span class="toc-number">4.</span> <span class="toc-text">layout的配置 – 决定输出格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logger工作流程"><span class="toc-number">5.</span> <span class="toc-text">logger工作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些注意点"><span class="toc-number">6.</span> <span class="toc-text">一些注意点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Refers"><span class="toc-number">7.</span> <span class="toc-text">Refers</span></a></li></ol>
 		</div>
 		
-		<p><img src="http://logging.apache.org/log4j/2.x/images/Log4jClasses.jpg" alt="log4j组件"><br>log4j组件如上图</p>
+		<p>log4j的主要组件如下图：<br><img src="http://logging.apache.org/log4j/2.x/images/Log4jClasses.jpg" alt="log4j组件"></p>
 <h2 id="定义一个logger"><a href="#定义一个logger" class="headerlink" title="定义一个logger"></a>定义一个logger</h2><p><code>private static final Logger logger = LogManager.getLogger(AndroidQueryServiceImpl.class);</code><br>LogManager.getLogger会指定logger的名称。一般取类的名称，也可以指定特定的名称，如：<br><code>private static final Logger tracerlogger = LogManager.getLogger(&quot;tracer-business&quot;);</code><br>如果取相同的名称，则x,y指向同一个logger对象，如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Logger x = LogManager.getLogger(<span class="string">"wombat"</span>);</span><br><span class="line">Logger y = LogManager.getLogger(<span class="string">"wombat"</span>);</span><br></pre></td></tr></table></figure></p>
 <h2 id="logger的配置-–-决定输出级别"><a href="#logger的配置-–-决定输出级别" class="headerlink" title="logger的配置 – 决定输出级别"></a>logger的配置 – 决定输出级别</h2><ul>
 <li>logger的日志级别分为TRACE, DEBUG, INFO, WARN, ERROR, and FATAL。</li>
@@ -193,7 +193,7 @@
 <li>创建loggingEvent对象，包括当前logger的信息，比如当前时间，线程，级别，logger等信息</li>
 <li>引用appenders</li>
 <li>格式化输出</li>
-<li>将loggingEvent输出到对应的appenders</li>
+<li>将loggingEvent输出到对应的appenders<br><img src="https://logback.qos.ch/manual/underTheHood.html" alt="logger工作流程"></li>
 </ul>
 <h2 id="一些注意点"><a href="#一些注意点" class="headerlink" title="一些注意点"></a>一些注意点</h2><ul>
 <li>当加入多个参数时，如<br><code>logger.debug(&quot;Entry number: &quot; + i + &quot; is &quot; + String.valueOf(entry[i]));</code><br>不管该日志是否会被打印出来，都会进行参数的拼接。因此为了减小开销，可以用isDebugEnabled()先判断一下 </li>
@@ -217,6 +217,11 @@
   
 	</div>
 		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a>
+  </div>
 
 
 
@@ -266,6 +271,8 @@
 <div class="tagslist">
 	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
+		
+			<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
 		
 			<li><a href="/tags/js/" title="js">js<sup>1</sup></a></li>
 		
