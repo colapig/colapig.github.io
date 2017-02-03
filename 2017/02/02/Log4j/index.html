@@ -37,7 +37,7 @@
 				<h1 class="site-name"><a href="/" title="COLAPIG">COLAPIG</a></h1>
 				<h2 class="blog-motto">A pig like drinking cola</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -50,7 +50,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:colapig.github.io">
 					</form>
 					
@@ -74,7 +74,7 @@
     </p>
   <p class="article-time">
     <time datetime="2017-02-02T07:05:47.000Z" itemprop="datePublished">2017-02-02</time>
-    Updated:<time datetime="2017-02-02T08:32:10.000Z" itemprop="dateModified">2017-02-02</time>
+    更新日期:<time datetime="2017-02-03T03:16:38.000Z" itemprop="dateModified">2017-02-03</time>
     
   </p>
 </header>
@@ -82,7 +82,7 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义一个logger"><span class="toc-number">1.</span> <span class="toc-text">定义一个logger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logger的配置-–-决定输出级别"><span class="toc-number">2.</span> <span class="toc-text">logger的配置 – 决定输出级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#appender的配置-–-决定输出位置"><span class="toc-number">3.</span> <span class="toc-text">appender的配置 – 决定输出位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#layout的配置-–-决定输出格式"><span class="toc-number">4.</span> <span class="toc-text">layout的配置 – 决定输出格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logger工作流程"><span class="toc-number">5.</span> <span class="toc-text">logger工作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些注意点"><span class="toc-number">6.</span> <span class="toc-text">一些注意点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Refers"><span class="toc-number">7.</span> <span class="toc-text">Refers</span></a></li></ol>
 		</div>
 		
@@ -193,7 +193,7 @@
 <li>创建loggingEvent对象，包括当前logger的信息，比如当前时间，线程，级别，logger等信息</li>
 <li>引用appenders</li>
 <li>格式化输出</li>
-<li>将loggingEvent输出到对应的appenders<br><img src="https://logback.qos.ch/manual/underTheHood.html" alt="logger工作流程"></li>
+<li>将loggingEvent输出到对应的appenders<br><img src="https://logback.qos.ch/manual/images/chapters/architecture/underTheHoodSequence2.gif" alt="logger工作流程"></li>
 </ul>
 <h2 id="一些注意点"><a href="#一些注意点" class="headerlink" title="一些注意点"></a>一些注意点</h2><ul>
 <li>当加入多个参数时，如<br><code>logger.debug(&quot;Entry number: &quot; + i + &quot; is &quot; + String.valueOf(entry[i]));</code><br>不管该日志是否会被打印出来，都会进行参数的拼接。因此为了减小开销，可以用isDebugEnabled()先判断一下 </li>
@@ -214,6 +214,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThrowableProxy</span><span class="params">(Throwable throwable)</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">this</span>.throwable = throwable;</span><br><span class="line">  <span class="keyword">this</span>.className = throwable.getClass().getName();</span><br><span class="line">  <span class="keyword">this</span>.message = throwable.getMessage();</span><br><span class="line">  <span class="keyword">this</span>.stackTraceElementProxyArray = ThrowableProxyUtil.steArrayToStepArray(throwable</span><br><span class="line">      .getStackTrace());</span><br><span class="line">  </span><br><span class="line">  Throwable nested = throwable.getCause();</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (nested != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.cause = <span class="keyword">new</span> ThrowableProxy(nested);</span><br><span class="line">    <span class="keyword">this</span>.cause.commonFrames = ThrowableProxyUtil</span><br><span class="line">        .findNumberOfCommonFrames(nested.getStackTrace(),</span><br><span class="line">            stackTraceElementProxyArray);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(GET_SUPPRESSED_METHOD != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// this will only execute on Java 7</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      Object obj = GET_SUPPRESSED_METHOD.invoke(throwable);</span><br><span class="line">      <span class="keyword">if</span>(obj <span class="keyword">instanceof</span> Throwable[]) &#123;</span><br><span class="line">        Throwable[] throwableSuppressed = (Throwable[]) obj;</span><br><span class="line">        <span class="keyword">if</span>(throwableSuppressed.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">          suppressed = <span class="keyword">new</span> ThrowableProxy[throwableSuppressed.length];</span><br><span class="line">          <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;throwableSuppressed.length;i++) &#123;</span><br><span class="line">            <span class="keyword">this</span>.suppressed[i] = <span class="keyword">new</span> ThrowableProxy(throwableSuppressed[i]);</span><br><span class="line">            <span class="keyword">this</span>.suppressed[i].commonFrames = ThrowableProxyUtil</span><br><span class="line">                .findNumberOfCommonFrames(throwableSuppressed[i].getStackTrace(),</span><br><span class="line">                    stackTraceElementProxyArray);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">      <span class="comment">// ignore</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">      <span class="comment">// ignore</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="Refers"><a href="#Refers" class="headerlink" title="Refers"></a>Refers</h2><p><a href="https://logback.qos.ch/manual/architecture.html" target="_blank" rel="external">logback Manual</a>  </p>
 <p><a href="http://logging.apache.org/log4j/2.x/manual/architecture.html" target="_blank" rel="external">log4j 2</a></p>
+<p><a href="http://blog.csdn.net/haidage/article/details/6794509/" target="_blank" rel="external">logback配置详解</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -254,22 +255,22 @@
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
   <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义一个logger"><span class="toc-number">1.</span> <span class="toc-text">定义一个logger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logger的配置-–-决定输出级别"><span class="toc-number">2.</span> <span class="toc-text">logger的配置 – 决定输出级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#appender的配置-–-决定输出位置"><span class="toc-number">3.</span> <span class="toc-text">appender的配置 – 决定输出位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#layout的配置-–-决定输出格式"><span class="toc-number">4.</span> <span class="toc-text">layout的配置 – 决定输出格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logger工作流程"><span class="toc-number">5.</span> <span class="toc-text">logger工作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些注意点"><span class="toc-number">6.</span> <span class="toc-text">一些注意点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Refers"><span class="toc-number">7.</span> <span class="toc-text">Refers</span></a></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
@@ -287,11 +288,11 @@
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS</a>
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
       <li><a href="http://kinva.cc" target="_blank" title="YangJian">迪拜小王子</a></li>
     </ul>
