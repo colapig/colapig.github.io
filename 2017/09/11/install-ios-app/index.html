@@ -4,14 +4,13 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>关于scrapy | COLAPIG</title>
+    <title>xcode7编译app | COLAPIG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Gee">
     
-    <meta name="description" content="scrapy是python写的爬虫框架，可以快速进行网站的爬取。详细文档见http://scrapy-chs.readthedocs.io/zh_CN/latest/intro/tutorial.html
-目录结构1scrapy startproject &amp;lt;工程名&amp;gt;
-会创建如下结构123">
+    <meta name="description" content="学习下mac上手机app的安装与运行。
+安装xcode在mac osx 10.10的系统下，可以运行的最高版本xcode7.2.1，更新的版本需要10.11（ El Capitan）的支持。xcode7.2需要大概9.1G的空间。各版本xcode的下载地址:https://developer.app">
     
     
     
@@ -67,15 +66,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/05/03/scrapy/" title="关于scrapy" itemprop="url">关于scrapy</a>
+      <a href="/2017/09/11/install-ios-app/" title="xcode7编译app" itemprop="url">xcode7编译app</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://colapig.github.io" title="Gee">Gee</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-05-03T03:40:18.000Z" itemprop="datePublished">2016-05-03</time>
-    Updated:<time datetime="2016-05-24T16:19:15.000Z" itemprop="dateModified">2016-05-25</time>
+    <time datetime="2017-09-10T16:51:55.000Z" itemprop="datePublished">2017-09-11</time>
+    Updated:<time datetime="2017-09-10T17:28:00.000Z" itemprop="dateModified">2017-09-11</time>
     
   </p>
 </header>
@@ -84,37 +83,23 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录结构"><span class="toc-number">1.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调试-Scrapy-shell"><span class="toc-number">2.</span> <span class="toc-text">调试-Scrapy shell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Middleware中间件"><span class="toc-number">3.</span> <span class="toc-text">Middleware中间件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令行"><span class="toc-number">4.</span> <span class="toc-text">命令行</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装xcode"><span class="toc-number">1.</span> <span class="toc-text">安装xcode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#导入工程"><span class="toc-number">2.</span> <span class="toc-text">导入工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#真机调试"><span class="toc-number">3.</span> <span class="toc-text">真机调试</span></a></li></ol>
 		</div>
 		
-		<p>scrapy是python写的爬虫框架，可以快速进行网站的爬取。<br>详细文档见<a href="http://scrapy-chs.readthedocs.io/zh_CN/latest/intro/tutorial.html" target="_blank" rel="external">http://scrapy-chs.readthedocs.io/zh_CN/latest/intro/tutorial.html</a></p>
-<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy startproject <span class="tag">&lt;<span class="name">工程名</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>会创建如下结构<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;工程名&gt;/</span><br><span class="line">    scrapy<span class="selector-class">.cfg</span></span><br><span class="line">    &lt;工程名&gt;/</span><br><span class="line">        __init__<span class="selector-class">.py</span></span><br><span class="line">        items<span class="selector-class">.py</span></span><br><span class="line">        pipelines<span class="selector-class">.py</span></span><br><span class="line">        settings<span class="selector-class">.py</span></span><br><span class="line">        spiders/</span><br><span class="line">            __init__<span class="selector-class">.py</span></span><br><span class="line">            ...</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>scrapy.cfg: 项目的配置文件</li>
-<li>tutorial/: 该项目的python模块。之后您将在此加入代码。</li>
-<li>tutorial/items.py: 项目中的item文件.</li>
-<li>tutorial/pipelines.py: 项目中的pipelines文件.</li>
-<li>tutorial/settings.py: 项目的设置文件.</li>
-<li>tutorial/spiders/: 放置spider代码的目录.</li>
-</ul>
-<h3 id="调试-Scrapy-shell"><a href="#调试-Scrapy-shell" class="headerlink" title="调试-Scrapy shell"></a>调试-Scrapy shell</h3><p>在目录下运行<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy <span class="built_in">shell</span> <span class="string">'url'</span></span><br></pre></td></tr></table></figure></p>
-<p>可快速对一个网址进行调试，详见<a href="http://scrapy-chs.readthedocs.io/zh_CN/latest/topics/shell.html" target="_blank" rel="external">http://scrapy-chs.readthedocs.io/zh_CN/latest/topics/shell.html</a><br>常见的是copy一个xpath并进行调试</p>
-<h3 id="Middleware中间件"><a href="#Middleware中间件" class="headerlink" title="Middleware中间件"></a>Middleware中间件</h3><p>可以添加代码来处理发送给Spiders 的response及spider产生的item和request。</p>
-<h3 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h3><ul>
-<li>创建项目 scrapy startproject <project_name></project_name></li>
-<li>进入项目目录 cd <project_name></project_name></li>
-<li>创建一个spider scrapy genspider [-t template] <spidername> <domain></domain></spidername></li>
-<li>运行爬虫 scrapy crawl <spidername></spidername></li>
-<li>启动shell scrapy shell [url]</li>
-</ul>
+		<p>学习下mac上手机app的安装与运行。</p>
+<h3 id="安装xcode"><a href="#安装xcode" class="headerlink" title="安装xcode"></a>安装xcode</h3><p>在mac osx 10.10的系统下，可以运行的最高版本xcode7.2.1，更新的版本需要10.11（ El Capitan）的支持。<br>xcode7.2需要大概9.1G的空间。<br>各版本xcode的下载地址:<a href="https://developer.apple.com/download/more/" target="_blank" rel="external">https://developer.apple.com/download/more/</a></p>
+<p>（正确做法：升级到Capitan然后装xcode8。。。简直在作死。。。然而就是喜欢yosemeti）</p>
+<h3 id="导入工程"><a href="#导入工程" class="headerlink" title="导入工程"></a>导入工程</h3><p>。。。没啥说的，少啥包导入啥包。<br>其中报了一个错<br><code>file &#39;netinet/ip_icmp.h&#39; not found。</code><br>没做任何操作，重新编译莫名其妙好了。但在真机调试的时候又粗现了，说少这个文件。<br>发现是在/usr/include里的头文件。确实没有。找到路径在<br><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include/netinet</code><br>补上了这个文件就好了。。。（大概是xcode7里确实没有，8就有了）<br>还遇到一个错说Main.storyboard是xcode8下写的，只能用xcode8打开。。。<br>万能的度娘告诉我，删掉storyboard里的这句话。<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;capability <span class="built_in">name</span>=<span class="string">"documents saved in the Xcode 8 format"</span> minToolsVersion=<span class="string">"8.0"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="真机调试"><a href="#真机调试" class="headerlink" title="真机调试"></a>真机调试</h3><p>据说从7开始，不用付费的开发者账号也能进行真机调试。<br>在Xcode -&gt; Preference -&gt; account里输入苹果id即可。<br>里面有个小坑，输入密码之后提示需要输入“App 专用密码”。。。<br>这个密码在<a href="https://appleid.apple.com/#!&amp;page=signin" target="_blank" rel="external">https://appleid.apple.com/#!&amp;page=signin</a> 登录之后设置，Security里面可以找到。<br>解释可以见<a href="https://support.apple.com/zh-cn/HT204397" target="_blank" rel="external">https://support.apple.com/zh-cn/HT204397</a>  </p>
+<p>设置完了，换成自己的开发者账号，就可以插上机器进行调试了。教程见<a href="http://www.jianshu.com/p/3b2be6454462" target="_blank" rel="external">http://www.jianshu.com/p/3b2be6454462</a><br>然后插上发现，Could not find Developer Disk Image。。。<br>keke。。。<br>xcode7最高ios9.2，手机是10.3.2的。<br>下一个10.3.2的包，然后放在<br><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport</code><br>下，重启xcode，应该就好了。  </p>
+<p>；p</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/python/">python</a>
+  <span></span> <a href="/tags/others/">others</a>
   </div>
 
 
@@ -122,7 +107,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://colapig.github.io/2016/05/03/scrapy/" data-title="关于scrapy | COLAPIG" data-tsina="null" class="share clearfix">
+  <div data-url="http://colapig.github.io/2017/09/11/install-ios-app/" data-title="xcode7编译app | COLAPIG" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -131,14 +116,14 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/05/10/uglifyjs/" title="uglifyjs与AST">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  uglifyjs与AST</span>
+
+<div class="next">
+<a href="/2017/09/07/debug-mobile/"  title="调试手机上的js">
+ <strong>NEXT:</strong><br/> 
+ <span>调试手机上的js
+</span>
 </a>
 </div>
-
 
 </nav>
 
@@ -152,7 +137,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录结构"><span class="toc-number">1.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调试-Scrapy-shell"><span class="toc-number">2.</span> <span class="toc-text">调试-Scrapy shell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Middleware中间件"><span class="toc-number">3.</span> <span class="toc-text">Middleware中间件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令行"><span class="toc-number">4.</span> <span class="toc-text">命令行</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装xcode"><span class="toc-number">1.</span> <span class="toc-text">安装xcode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#导入工程"><span class="toc-number">2.</span> <span class="toc-text">导入工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#真机调试"><span class="toc-number">3.</span> <span class="toc-text">真机调试</span></a></li></ol>
   </div>
 
 <div id="asidepart">
