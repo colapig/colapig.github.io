@@ -74,7 +74,7 @@
     </p>
   <p class="article-time">
     <time datetime="2017-09-10T16:51:55.000Z" itemprop="datePublished">2017-09-11</time>
-    Updated:<time datetime="2017-09-10T17:40:41.000Z" itemprop="dateModified">2017-09-11</time>
+    Updated:<time datetime="2017-09-10T17:55:11.000Z" itemprop="dateModified">2017-09-11</time>
     
   </p>
 </header>
@@ -91,7 +91,7 @@
 <p>（正确做法：升级到Capitan然后装xcode8。。。简直在作死。。。然而就是喜欢yosemeti）</p>
 <h3 id="导入工程"><a href="#导入工程" class="headerlink" title="导入工程"></a>导入工程</h3><p>。。。没啥说的，少啥包导入啥包。<br>其中报了一个错<br><code>file &#39;netinet/ip_icmp.h&#39; not found。</code><br>没做任何操作，重新编译莫名其妙好了。但在真机调试的时候又粗现了，说少这个文件。<br>发现是在/usr/include里的头文件。确实没有。找到路径在<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/Applications/</span>Xcode.app<span class="regexp">/Contents/</span>Developer<span class="regexp">/Platforms/i</span>PhoneOS.platform<span class="regexp">/Developer/</span>SDKs<span class="regexp">/iPhoneOS.sdk/u</span>sr<span class="regexp">/include/</span>netinet</span><br></pre></td></tr></table></figure></p>
 <p>补上了这个文件就好了。。。（大概是xcode7里确实没有，8就有了）<br>还遇到一个错说Main.storyboard是xcode8下写的，只能用xcode8打开。。。<br>万能的度娘告诉我，删掉storyboard里的这句话。<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;capability <span class="built_in">name</span>=<span class="string">"documents saved in the Xcode 8 format"</span> minToolsVersion=<span class="string">"8.0"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
-<h3 id="真机调试"><a href="#真机调试" class="headerlink" title="真机调试"></a>真机调试</h3><p>据说从7开始，不用付费的开发者账号也能进行真机调试。<br>在Xcode -&gt; Preference -&gt; account里输入苹果id即可。<br>里面有个小坑，输入密码之后提示需要输入“App 专用密码”。。。<br>这个密码在<a href="https://appleid.apple.com/#!&amp;page=signin" target="_blank" rel="external">https://appleid.apple.com/#!&amp;page=signin</a> 登录之后设置，Security里面可以找到。<br>解释可以见<a href="https://support.apple.com/zh-cn/HT204397" target="_blank" rel="external">https://support.apple.com/zh-cn/HT204397</a>  </p>
+<h3 id="真机调试"><a href="#真机调试" class="headerlink" title="真机调试"></a>真机调试</h3><p>据说从7开始，不用付费的开发者账号也能进行真机调试。<br>在Xcode - &gt; Preference - &gt; account里输入苹果id即可。<br>里面有个小坑，输入密码之后提示需要输入“App 专用密码”。。。<br>这个密码在<a href="https://appleid.apple.com/#!&amp;page=signin" target="_blank" rel="external">https://appleid.apple.com/#!&amp;page=signin</a> 登录之后设置，Security里面可以找到。<br>解释可以见<a href="https://support.apple.com/zh-cn/HT204397" target="_blank" rel="external">https://support.apple.com/zh-cn/HT204397</a>  </p>
 <p>设置完了，换成自己的开发者账号，就可以插上机器进行调试了。教程见<a href="http://www.jianshu.com/p/3b2be6454462" target="_blank" rel="external">http://www.jianshu.com/p/3b2be6454462</a><br>然后插上发现，Could not find Developer Disk Image。。。<br>keke。。。<br>xcode7最高ios9.2，手机是10.3.2的。<br>下一个10.3.2的包，然后放在<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/Applications/</span>Xcode.app<span class="regexp">/Contents/</span>Developer<span class="regexp">/Platforms/i</span>PhoneOS.platform<span class="regexp">/DeviceSupport</span></span><br></pre></td></tr></table></figure></p>
 <p>下，重启xcode，应该就好了。  </p>
 <p>；p</p>
@@ -101,7 +101,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/others/">others</a>
+  <span></span> <a href="/tags/other/">other</a>
   </div>
 
 
@@ -161,7 +161,9 @@
 		
 			<li><a href="/tags/mooc/" title="mooc">mooc<sup>1</sup></a></li>
 		
-			<li><a href="/tags/others/" title="others">others<sup>2</sup></a></li>
+			<li><a href="/tags/other/" title="other">other<sup>2</sup></a></li>
+		
+			<li><a href="/tags/others/" title="others">others<sup>0</sup></a></li>
 		
 			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
 		
