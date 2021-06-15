@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Q2</title>
+<link href="http://cdn.bootcss.com/flat-ui/2.3.0/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://cdn.bootcss.com/flat-ui/2.3.0/css/flat-ui.css" rel="stylesheet">
+<script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/flat-ui/2.2.1/js/flat-ui.js"></script>
+<style>
+      body {
+        padding-top: 50px;
+      }
+    </style>
+</head>
+<script>
+function check(){
+  var num = $("input[name=optionsRadios]:checked").val();
+  if(num === "3"){
+    window.location = "http://colapig.cc/congrass/3.html";
+  }
+}
+</script>
+<body>
+<div class="container">
+    <div class="col-xs-12">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+             <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="#">Q2</a>
+              </div>
+              <div id="navbar" class="collapse navbar-collapse">
+                  <ul class="nav navbar-nav">
+                   
+                  </ul>
+             </div><!--/.nav-collapse -->
+             </div>
+           </nav>
+       </div>
+
+<div class="col-md-3">  
+  絵を見て、最もよいものを一つ選んでください。男の人の名前は、なんですか。
+   <div class="demo-browser-content">
+       <img src="../img/ll.jpg" alt="" />
+   </div>
+        <form role="form">
+           <div class="form-group">
+             <label class="radio">
+                <input type="radio"  name="optionsRadios" id="optionsRadios1" value="1"  >
+              .xelz_math
+              </label>
+              <label class="radio">
+                <input type="radio"  name="optionsRadios" id="optionsRadios2" value="2"  >
+              .xelz_biology
+              </label>
+              <label class="radio">
+                <input type="radio"  name="optionsRadios" id="optionsRadios3" value="3"  >
+              .xelz_history
+              </label>
+              <label class="radio">
+                <input type="radio"  name="optionsRadios" id="optionsRadios4" value="4"  >
+              .xelz_geography
+              </label>
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary" onclick="check();return false;">Submit</button>
+          </form>
+</div>
+</div>
+</body>
+</html>
