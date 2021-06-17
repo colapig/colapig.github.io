@@ -16,7 +16,7 @@
 <script>
 function check(){
   var num = $("input[name=optionsRadios]:checked").val();
-  if(num === "4"){
+  if(num === "2"){
     window.location = "http://colapig.cc/congrass/2.html";
   }else{
     alert('亲，再想想哦');
@@ -35,36 +35,38 @@ function check(){
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                   </button>
-                  <a class="navbar-brand" href="#">Q1</a>
+                  <a class="navbar-brand" href="#">FY22-Alibaba结业考试</a>
               </div>
               <div id="navbar" class="collapse navbar-collapse">
                   <ul class="nav navbar-nav">
-                   
+                   <!--  <li><a class="navbar-right" href="#fakelink">国栋</a></li> -->
                   </ul>
              </div><!--/.nav-collapse -->
+
              </div>
            </nav>
        </div>
 
 <div class="col-md-3">  
-  请从下面的图片中选出没见过的一项：
+  <br/>1、下图中所示的地名是（10分）：
+  <img src="../img/001.jpg" alt="1" class="img-thumbnail">
   <form role="form">
            <div class="form-group">
              <label class="radio">
                 <input type="radio"  name="optionsRadios" id="optionsRadios1" value="1"  >
-                  <img src="../img/001.png" alt="1" class="img-thumbnail" style="width:70px;height:70px;">
+                张家港
               </label>
               <label class="radio">
                 <input type="radio"  name="optionsRadios" id="optionsRadios2" value="2"  >
-                   <img src="../img/002.jpg" alt="2" class="img-thumbnail" style="width:70px;height:70px;">
+                张家界
               </label>
               <label class="radio">
                 <input type="radio"  name="optionsRadios" id="optionsRadios3" value="3"  >
-              <img src="../img/003.gif" alt="3" class="img-thumbnail" style="width:70px;height:70px;">
+                张家口
               </label>
               <label class="radio">
                 <input type="radio"  name="optionsRadios" id="optionsRadios4" value="4"  >
-               <img src="../img/004.gif" alt="4" class="img-thumbnail" style="width:70px;height:70px;">
+                张家川
               </label>
             </div>
             <button type="submit" class="btn btn-sm btn-primary" onclick="check();return false;">Submit</button>

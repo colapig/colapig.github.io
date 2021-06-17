@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>第二题</title>
+<title>第四题</title>
 <link href="https://cdn.bootcdn.net/ajax/libs/flat-ui/2.3.0/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="http://cdn.bootcss.com/flat-ui/2.3.0/css/flat-ui.css" rel="stylesheet">
 <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
@@ -16,8 +16,8 @@
 <script>
 function check(){
   var num = $("input[name=optionsRadios]:checked").val();
-  if(num === "1"){
-    window.location = "http://colapig.cc/congrass/3.html";
+  if(num === "2"){
+    window.location = "http://colapig.cc/congrass/5.html";
   }else{
     alert('亲，再想想哦');
   }
@@ -48,24 +48,24 @@ function check(){
        </div>
 
 <div class="col-md-3">  
-  <br/>2、以下哪个方式可以快速修复漏洞（10分）
+  <br/>4、绕过安全审计的正确姿势是：（10分）
   <form role="form">
            <div class="form-group">
              <label class="radio">
                 <input type="radio"  name="optionsRadios" id="optionsRadios1" value="1"  >
-                response加了一行回车解决命令执行漏洞
+                社工
               </label>
               <label class="radio">
                 <input type="radio"  name="optionsRadios" id="optionsRadios2" value="2"  >
-                用waf 
+                给自己加白名单
               </label>
               <label class="radio">
                 <input type="radio"  name="optionsRadios" id="optionsRadios3" value="3"  >
-                用安全包
+                请审计人员吃饭
               </label>
               <label class="radio">
                 <input type="radio"  name="optionsRadios" id="optionsRadios4" value="4"  >
-                漏洞是什么
+                暴力破解
               </label>
             </div>
             <button type="submit" class="btn btn-sm btn-primary" onclick="check();return false;">Submit</button>
